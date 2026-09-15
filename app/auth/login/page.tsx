@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Button from "@/components/ui/button";
 
 export default function LoginPage(){
     return (
@@ -41,6 +42,7 @@ export default function LoginPage(){
                             <input 
                                 id="password"
                                 type="password"
+                                placeholder="********"
                                 className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2 text-sm"
                             />
                         </div>
@@ -55,18 +57,16 @@ export default function LoginPage(){
                             </Link>
                         </div>
 
-                        <button 
-                            type="submit"
-                            className="w-full rounded-lg bg-primary py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover">
-                                Log in
-                            </button>
+                        <Button type="submit" className="w-full py-3 text-sm">
+                            Log in
+                        </Button>
                     </form>
 
                     <div className="mt-6 space-y-3 border-t border-border pt-4 text-center text-sm">
                         <p className="text-muted-foreground">
                             Need help? {" "}
                             <Link href="/contact" className="font-semibold text-primary hover:text-primary-hover">
-                                Contact Planet J
+                                Contact Us
                             </Link>
                         </p>
 

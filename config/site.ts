@@ -77,8 +77,13 @@ export const siteConfig = {
         action: { label: "Browse Tour Packages", href: "/tour-packages" },
       },
     ] satisfies ContentCard[],
-    validationMessage:
-      "ROAMIGO checks your trip details and available vehicle-driver pairs before showing the final price.",
+    checkoutValidation: {
+      eyebrow: "Before payment",
+      title: "Checked before checkout",
+      description:
+        "ROAMIGO completes these checks automatically before you continue to payment.",
+      steps: ["Trip details", "Vehicle-driver availability", "Final price"],
+    },
     serviceSummary: {
       title: "Travel your way",
       description:

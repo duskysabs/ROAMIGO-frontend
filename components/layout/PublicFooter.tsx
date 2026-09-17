@@ -10,7 +10,7 @@ export default function PublicFooter() {
 
   return (
     <footer className="border-t border-border bg-surface-warm">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-9 sm:grid-cols-2 sm:px-10 lg:grid-cols-[1.35fr_1fr_1.15fr_1fr] lg:gap-12 lg:py-10">
+      <div className="mx-auto grid max-w-[90rem] gap-8 px-6 py-8 sm:grid-cols-2 sm:px-10 lg:grid-cols-[1.3fr_1.15fr_1.25fr_1.2fr] lg:gap-10 lg:py-8">
         <div className="max-w-sm">
           <div className="flex items-center gap-3">
             <Image
@@ -35,7 +35,7 @@ export default function PublicFooter() {
 
         <div>
           <h2 className="text-sm font-bold text-foreground">Contact</h2>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">
+          <p className="mt-3 text-sm leading-6 text-muted-foreground lg:whitespace-nowrap">
             {siteConfig.footer.location}
           </p>
           <Link
@@ -48,13 +48,15 @@ export default function PublicFooter() {
 
         <div>
           <h2 className="text-sm font-bold text-foreground">Business hours</h2>
-          <dl className="mt-3 space-y-2.5 text-sm text-muted-foreground">
+          <dl className="mt-3 max-w-sm space-y-2.5 text-sm text-muted-foreground">
             {siteConfig.footer.businessHours.map((schedule) => (
               <div
                 key={schedule.days}
                 className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4"
               >
-                <dt className="leading-5">{schedule.days}</dt>
+                <dt className="leading-5 lg:whitespace-nowrap">
+                  {schedule.days}
+                </dt>
                 <dd className="whitespace-nowrap text-right leading-5">
                   {schedule.hours}
                 </dd>
@@ -65,12 +67,12 @@ export default function PublicFooter() {
 
         <div>
           <h2 className="text-sm font-bold text-foreground">Quick links</h2>
-          <ul className="mt-3 grid grid-cols-2 gap-x-8 gap-y-2.5 text-sm text-muted-foreground">
+          <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-muted-foreground">
             {quickLinks.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                  className="whitespace-nowrap hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                 >
                   {item.label}
                 </Link>

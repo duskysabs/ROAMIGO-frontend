@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CheckoutValidation from "@/components/home/CheckoutValidation";
 import { siteConfig } from "@/config/site";
 
 export default function TravelOptionsSection() {
@@ -48,10 +49,7 @@ export default function TravelOptionsSection() {
           ))}
         </div>
 
-        <p className="mt-6 rounded-xl border border-primary/15 bg-surface-warm px-5 py-4 text-sm leading-6 text-muted-foreground">
-          <span className="font-semibold text-foreground">Before payment: </span>
-          {home.validationMessage}
-        </p>
+        <CheckoutValidation />
       </div>
     </section>
   );

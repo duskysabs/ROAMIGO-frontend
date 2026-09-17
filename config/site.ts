@@ -58,7 +58,7 @@ export const siteConfig = {
       textAfterHighlight: "starts here.",
     },
     description:
-      "Book driver-included vehicle rental services for custom trips or approved Cebu tour packages.",
+      "Plan custom trips or explore Cebu tour packages, with a professional driver included.",
     actions: [
       { label: "Plan a Custom Trip", href: "/plan-a-trip" },
       { label: "Browse Tour Packages", href: "/tour-packages" },
@@ -67,37 +67,45 @@ export const siteConfig = {
       {
         title: "Custom Trips",
         description:
-          "Enter your route, schedule, passengers, and preferred vehicle category.",
+          "Build a trip around your destinations, stops, schedule, and group size.",
         action: { label: "Plan a Custom Trip", href: "/plan-a-trip" },
       },
       {
         title: "Tour Packages",
         description:
-          "Choose from active packages with approved routes, stops, and service information.",
+          "Browse predefined Cebu itineraries with complete service details.",
         action: { label: "Browse Tour Packages", href: "/tour-packages" },
       },
     ] satisfies ContentCard[],
     validationMessage:
-      "ROAMIGO validates the route, schedule, passenger capacity, and availability before presenting the final customer-facing price.",
+      "ROAMIGO checks your trip details and available vehicle-driver pairs before showing the final price.",
+    serviceSummary: {
+      title: "Travel your way",
+      description:
+        "Choose a custom route or a prepared Cebu itinerary. Every service includes a professional driver.",
+      items: ["Custom trips", "Cebu tour packages", "Driver included"],
+    },
     features: [
       {
-        title: "Automated validation",
+        title: "Checked availability",
         description:
-          "Route, schedule, capacity, availability, and readiness are checked before payment.",
+          "Trip details and eligible vehicle-driver pairs are checked before payment.",
       },
       {
-        title: "Final price",
+        title: "Clear final pricing",
         description:
-          "The customer sees the validated final price before continuing to payment.",
+          "Review the validated final price before continuing to payment.",
       },
       {
         title: "Driver included",
         description:
-          "An eligible designated vehicle-driver pair is assigned after confirmation.",
+          "A professional driver is included with every confirmed service.",
       },
     ],
   },
   footer: {
+    description:
+      "Driver-included vehicle rental services for custom trips and Cebu tours.",
     location: "Lapu-Lapu City, Cebu, Philippines",
     contactPage: "/contact",
     businessHours: [

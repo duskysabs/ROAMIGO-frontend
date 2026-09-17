@@ -28,10 +28,11 @@ export default function PublicHeader({
 
   return (
     <header className="border-b border-border bg-background">
-      <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-6 px-6 sm:px-10">
+      <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-5 px-6 sm:px-10">
         <Link
           href="/"
           onClick={closeMenu}
+          className="flex items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
           aria-label={`${siteConfig.brand.companyName} home`}
         >
           <Image
@@ -41,10 +42,18 @@ export default function PublicHeader({
             height={64}
             priority
           />
+          <span className="hidden sm:block">
+            <span className="block text-sm font-bold tracking-wide text-primary">
+              {siteConfig.brand.systemName}
+            </span>
+            <span className="block text-xs text-muted-foreground">
+              {siteConfig.brand.companyName}
+            </span>
+          </span>
         </Link>
 
         <nav
-          className="hidden items-center gap-7 text-sm font-medium md:flex"
+          className="hidden items-center gap-6 text-sm font-medium lg:flex"
           aria-label="Main navigation"
         >
           {navigation.map((item) => {
@@ -56,8 +65,8 @@ export default function PublicHeader({
                 href={item.href}
                 className={
                   isActive
-                    ? "text-primary"
-                    : "text-foreground/80 transition-colors hover:text-primary"
+                    ? "border-b-2 border-primary py-2 text-primary"
+                    : "border-b-2 border-transparent py-2 text-foreground/75 transition-colors hover:text-primary"
                 }
               >
                 {item.label}
@@ -66,7 +75,7 @@ export default function PublicHeader({
           })}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           {isAuthenticated ? (
             <span className="text-sm font-semibold">
               {customerName ?? "Customer"}
@@ -75,13 +84,13 @@ export default function PublicHeader({
             <>
               <Link
                 href={siteConfig.authentication.login.href}
-                className="rounded-md border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm"
+                className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {siteConfig.authentication.login.label}
               </Link>
               <Link
                 href={siteConfig.authentication.signup.href}
-                className="rounded-md bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
+                className="inline-flex min-h-10 items-center rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {siteConfig.authentication.signup.label}
               </Link>
@@ -91,19 +100,19 @@ export default function PublicHeader({
 
         <button
           type="button"
-          className="rounded-md border border-border px-4 py-2 text-sm font-semibold md:hidden"
+          className="rounded-lg border border-border px-4 py-2 text-sm font-semibold transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:hidden"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-navigation"
           onClick={() => setIsMenuOpen((current) => !current)}
         >
-          Menu
+          {isMenuOpen ? "Close" : "Menu"}
         </button>
       </div>
 
       {isMenuOpen && (
         <nav
           id="mobile-navigation"
-          className="border-t border-border px-6 py-4 md:hidden"
+          className="border-t border-border px-6 py-4 sm:px-10 lg:hidden"
           aria-label="Mobile navigation"
         >
           <ul className="space-y-2">

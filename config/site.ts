@@ -49,7 +49,6 @@ export const siteConfig = {
   ] satisfies NavigationItem[],
   authentication: {
     login: { label: "Log in", href: "/auth/login" },
-    signup: { label: "Sign up", href: "/auth/signup" },
   },
   home: {
     heading: {

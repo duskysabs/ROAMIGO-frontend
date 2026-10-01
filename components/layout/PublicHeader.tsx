@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import LogoutButton from "@/components/auth/LogoutButton";
 import { siteConfig } from "@/config/site";
 
 type PublicHeaderProps = {
@@ -77,24 +78,22 @@ export default function PublicHeader({
 
         <div className="hidden items-center gap-3 lg:flex">
           {isAuthenticated ? (
-            <span className="text-sm font-semibold">
-              {customerName ?? "Customer"}
-            </span>
-          ) : (
             <>
               <Link
-                href={siteConfig.authentication.login.href}
-                className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                href="/customer"
+                className="text-sm font-semibold text-foreground hover:text-primary"
               >
-                {siteConfig.authentication.login.label}
+                {customerName ?? "My account"}
               </Link>
-              <Link
-                href={siteConfig.authentication.signup.href}
-                className="inline-flex min-h-10 items-center rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-              >
-                {siteConfig.authentication.signup.label}
-              </Link>
+              <LogoutButton className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm disabled:cursor-not-allowed disabled:opacity-60" />
             </>
+          ) : (
+            <Link
+              href={siteConfig.authentication.login.href}
+              className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              {siteConfig.authentication.login.label}
+            </Link>
           )}
         </div>
 
@@ -137,21 +136,28 @@ export default function PublicHeader({
             })}
           </ul>
 
-          {!isAuthenticated && (
-            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-border pt-4">
+          {isAuthenticated ? (
+            <div className="mt-4 grid gap-3 border-t border-border pt-4">
               <Link
-                href={siteConfig.authentication.login.href}
+                href="/customer"
                 onClick={closeMenu}
                 className="rounded-md border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
               >
-                {siteConfig.authentication.login.label}
+                {customerName ?? "My account"}
               </Link>
+              <LogoutButton
+                onLoggedOut={closeMenu}
+                className="rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"
+              />
+            </div>
+          ) : (
+            <div className="mt-4 border-t border-border pt-4">
               <Link
-                href={siteConfig.authentication.signup.href}
+                href={siteConfig.authentication.login.href}
                 onClick={closeMenu}
-                className="rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground"
+                className="block rounded-md border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
               >
-                {siteConfig.authentication.signup.label}
+                {siteConfig.authentication.login.label}
               </Link>
             </div>
           )}

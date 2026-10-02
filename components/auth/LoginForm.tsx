@@ -12,6 +12,7 @@ export default function LoginForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -30,7 +31,9 @@ export default function LoginForm() {
       });
 
       if (!response.ok) {
-        const body = (await response.json().catch(() => null)) as LoginError | null;
+        const body = (await response.json().catch(() =>
+          null,
+        )) as LoginError | null;
         setError(body?.message ?? "Unable to log in. Please try again.");
         return;
       }
@@ -45,7 +48,7 @@ export default function LoginForm() {
   }
 
   return (
-    <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
+    <form className="mt-6 space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
       <div>
         <label
           htmlFor="email"
@@ -62,7 +65,7 @@ export default function LoginForm() {
           required
           disabled={isSubmitting}
           placeholder="customer@example.com"
-          className="mt-2 min-h-11 w-full rounded-lg border border-border bg-background px-4 py-2 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none transition placeholder:text-muted-foreground/75 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
         />
       </div>
 
@@ -73,23 +76,35 @@ export default function LoginForm() {
         >
           Password
         </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          maxLength={1024}
-          disabled={isSubmitting}
-          className="mt-2 min-h-11 w-full rounded-lg border border-border bg-background px-4 py-2 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-60"
-        />
+        <div className="relative mt-2">
+          <input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            maxLength={1024}
+            disabled={isSubmitting}
+            className="min-h-12 w-full rounded-xl border border-border bg-background py-3 pl-4 pr-20 text-base outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
+          />
+          <button
+            type="button"
+            aria-controls="password"
+            aria-pressed={showPassword}
+            disabled={isSubmitting}
+            onClick={() => setShowPassword((isVisible) => !isVisible)}
+            className="absolute inset-y-0 right-0 flex min-w-16 items-center justify-center rounded-r-xl px-3 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
       </div>
 
       {error && (
         <div
           role="alert"
           aria-live="polite"
-          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"
         >
           {error}
         </div>
@@ -98,11 +113,10 @@ export default function LoginForm() {
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="min-h-11 w-full px-5 py-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+        className="min-h-12 w-full px-5 py-3 text-base disabled:cursor-not-allowed disabled:opacity-60 sm:text-sm"
       >
         {isSubmitting ? "Logging in..." : "Log in"}
       </Button>
-
     </form>
   );
 }

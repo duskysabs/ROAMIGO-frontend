@@ -9,8 +9,10 @@ export default function Home() {
       <Navbar />
 
       <main className="flex-1">
-        <HeroSection />
-        <TravelOptionsSection />
+        <div className="bg-gradient-to-b from-surface-warm via-background to-background">
+          <HeroSection />
+          <TravelOptionsSection />
+        </div>
       </main>
 
       <Footer />

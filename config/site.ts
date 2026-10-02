@@ -61,10 +61,6 @@ export const siteConfig = {
     },
     description:
       "Plan custom trips or explore Cebu tour packages, with a professional driver included.",
-    heroPhoto: {
-      imagePath: "/images/home/hero-cebu-driver-v2.png",
-      alt: "Planet J driver beside a white passenger van at a Cebu coastal overlook",
-    },
     actions: [
       { label: "Plan a Custom Trip", href: "/plan-a-trip" },
       { label: "Browse Tour Packages", href: "/tour-packages" },
@@ -92,8 +88,8 @@ export const siteConfig = {
       title: "Group travel, handled professionally",
       description:
         "Vehicle-driver availability is checked against your trip details before you continue to payment.",
-      imagePath: "/images/home/planet-j-fleet-enhanced.png",
-      alt: "Four white Planet J passenger buses parked in a row",
+      imagePath: "/images/home/hero-planet-j-yard-v4.png",
+      alt: "Planet J fleet of buses and vans parked in its Cebu vehicle yard",
     },
     checkoutValidation: {
       eyebrow: "Confirmed before payment",

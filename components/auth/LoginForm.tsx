@@ -8,7 +8,11 @@ type LoginError = {
   message?: string;
 };
 
-export default function LoginForm() {
+export default function LoginForm({
+  redirectTo = "/customer",
+}: {
+  redirectTo?: string;
+}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,7 +42,7 @@ export default function LoginForm() {
         return;
       }
 
-      router.replace("/customer");
+      router.replace(redirectTo);
       router.refresh();
     } catch {
       setError("Unable to reach the login service. Please try again.");

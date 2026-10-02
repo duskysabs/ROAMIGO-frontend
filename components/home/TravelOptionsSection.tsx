@@ -7,7 +7,7 @@ export default function TravelOptionsSection() {
   const { home } = siteConfig;
 
   return (
-    <section className="bg-gradient-to-br from-surface-warm via-background to-background px-6 py-14 sm:px-10 sm:py-16 lg:py-20">
+    <section className="px-6 pb-14 pt-8 sm:px-10 sm:pb-16 sm:pt-10 lg:pb-20 lg:pt-12">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">

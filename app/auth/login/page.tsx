@@ -2,11 +2,23 @@ import { redirect } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
 import { getSessionState } from "@/lib/auth/session";
 
-export default async function LoginPage() {
+function safeRedirectPath(value: string | string[] | undefined): string {
+  const candidate = Array.isArray(value) ? value[0] : value;
+  return candidate?.startsWith("/") && !candidate.startsWith("//")
+    ? candidate
+    : "/customer";
+}
+
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string | string[] }>;
+}) {
+  const redirectTo = safeRedirectPath((await searchParams).next);
   const session = await getSessionState();
 
   if (session.status === "authenticated") {
-    redirect("/customer");
+    redirect(redirectTo);
   }
 
   return (
@@ -40,7 +52,7 @@ export default async function LoginPage() {
             Enter your account details to manage your trips.
           </p>
 
-          <LoginForm />
+          <LoginForm redirectTo={redirectTo} />
         </div>
       </div>
     </section>

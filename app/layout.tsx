@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   title: "ROAMIGO | Planet J Rent A Car",
   description:
     "Driver-included Custom Trips and fixed-route Cebu Tour Packages, powered by ROAMIGO.",
+  icons: {
+    icon: "/images/planet-j-logo.png",
+    apple: "/images/planet-j-logo.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

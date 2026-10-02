@@ -7,6 +7,8 @@ export type NavigationItem = {
 export type ContentCard = {
   title: string;
   description: string;
+  imagePath: string;
+  photoAlt: string;
   action: {
     label: string;
     href: string;
@@ -51,6 +53,7 @@ export const siteConfig = {
     login: { label: "Log in", href: "/auth/login" },
   },
   home: {
+    eyebrow: "Driver-included Cebu travel",
     heading: {
       textBeforeHighlight: "Your Cebu",
       highlightedText: "journey",
@@ -58,6 +61,10 @@ export const siteConfig = {
     },
     description:
       "Plan custom trips or explore Cebu tour packages, with a professional driver included.",
+    heroPhoto: {
+      imagePath: "/images/home/hero-cebu-driver-v2.png",
+      alt: "Planet J driver beside a white passenger van at a Cebu coastal overlook",
+    },
     actions: [
       { label: "Plan a Custom Trip", href: "/plan-a-trip" },
       { label: "Browse Tour Packages", href: "/tour-packages" },
@@ -67,45 +74,31 @@ export const siteConfig = {
         title: "Custom Trips",
         description:
           "Build a trip around your destinations, stops, schedule, and group size.",
+        imagePath: "/images/home/custom-trip-mountain-view-enhanced.png",
+        photoAlt: "Mountain landscape viewed from a Cebu countryside stop",
         action: { label: "Plan a Custom Trip", href: "/plan-a-trip" },
       },
       {
         title: "Tour Packages",
         description:
           "Browse predefined Cebu itineraries with complete service details.",
+        imagePath: "/images/home/tour-package-cebu-coast-enhanced.png",
+        photoAlt: "Clear coastal water and an outrigger boat in Cebu",
         action: { label: "Browse Tour Packages", href: "/tour-packages" },
       },
     ] satisfies ContentCard[],
+    fleet: {
+      eyebrow: "Planet J fleet",
+      title: "Group travel, handled professionally",
+      description:
+        "Vehicle-driver availability is checked against your trip details before you continue to payment.",
+      imagePath: "/images/home/planet-j-fleet-enhanced.png",
+      alt: "Four white Planet J passenger buses parked in a row",
+    },
     checkoutValidation: {
-      eyebrow: "Before payment",
-      title: "Checked before checkout",
-      description:
-        "ROAMIGO completes these checks automatically before you continue to payment.",
-      steps: ["Trip details", "Vehicle-driver availability", "Final price"],
+      eyebrow: "Confirmed before payment",
+      items: ["Trip details", "Availability", "Final price"],
     },
-    serviceSummary: {
-      title: "Travel your way",
-      description:
-        "Choose a custom route or a prepared Cebu itinerary. Every service includes a professional driver.",
-      items: ["Custom trips", "Cebu tour packages", "Driver included"],
-    },
-    features: [
-      {
-        title: "Checked availability",
-        description:
-          "Trip details and eligible vehicle-driver pairs are checked before payment.",
-      },
-      {
-        title: "Clear final pricing",
-        description:
-          "Review the validated final price before continuing to payment.",
-      },
-      {
-        title: "Driver included",
-        description:
-          "A professional driver is included with every confirmed service.",
-      },
-    ],
   },
   footer: {
     description:

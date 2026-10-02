@@ -1,5 +1,4 @@
 import Footer from "@/components/footer";
-import FeatureHighlights from "@/components/home/FeatureHighlights";
 import HeroSection from "@/components/home/HeroSection";
 import TravelOptionsSection from "@/components/home/TravelOptionsSection";
 import Navbar from "@/components/navbar";
@@ -12,7 +11,6 @@ export default function Home() {
       <main className="flex-1">
         <HeroSection />
         <TravelOptionsSection />
-        <FeatureHighlights />
       </main>
 
       <Footer />

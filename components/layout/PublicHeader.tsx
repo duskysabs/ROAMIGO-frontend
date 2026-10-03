@@ -88,12 +88,20 @@ export default function PublicHeader({
               <LogoutButton className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm disabled:cursor-not-allowed disabled:opacity-60" />
             </>
           ) : (
-            <Link
-              href={siteConfig.authentication.login.href}
-              className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              {siteConfig.authentication.login.label}
-            </Link>
+            <>
+              <Link
+                href={siteConfig.authentication.signup.href}
+                className="text-sm font-semibold text-foreground transition-colors hover:text-primary"
+              >
+                {siteConfig.authentication.signup.label}
+              </Link>
+              <Link
+                href={siteConfig.authentication.login.href}
+                className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                {siteConfig.authentication.login.label}
+              </Link>
+            </>
           )}
         </div>
 
@@ -151,7 +159,14 @@ export default function PublicHeader({
               />
             </div>
           ) : (
-            <div className="mt-4 border-t border-border pt-4">
+            <div className="mt-4 grid gap-3 border-t border-border pt-4">
+              <Link
+                href={siteConfig.authentication.signup.href}
+                onClick={closeMenu}
+                className="block rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground"
+              >
+                {siteConfig.authentication.signup.label}
+              </Link>
               <Link
                 href={siteConfig.authentication.login.href}
                 onClick={closeMenu}

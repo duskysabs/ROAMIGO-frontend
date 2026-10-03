@@ -10,13 +10,18 @@ export type SessionState =
   | { status: "unauthenticated" }
   | { status: "unavailable" };
 
-export type LoginResponse = {
-  accessToken: string;
+export type AuthNextStep = "APPLICATION" | "COMPLETE_PROFILE" | "CONFIRM_EMAIL";
+
+export type AuthenticationResponse = {
+  accessToken: string | null;
   expiresIn?: number;
   user: {
     id: string;
     email?: string | null;
   };
+  requiresEmailConfirmation: boolean;
+  requiresProfile: boolean;
+  nextStep: AuthNextStep;
 };
 
 type UnknownRecord = Record<string, unknown>;
@@ -29,15 +34,26 @@ function optionalString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-export function parseLoginResponse(value: unknown): LoginResponse | null {
+function parseNextStep(value: unknown): AuthNextStep | null {
+  return value === "APPLICATION" ||
+    value === "COMPLETE_PROFILE" ||
+    value === "CONFIRM_EMAIL"
+    ? value
+    : null;
+}
+
+export function parseAuthenticationResponse(
+  value: unknown,
+): AuthenticationResponse | null {
   if (!isRecord(value) || !isRecord(value.user)) {
     return null;
   }
 
   const accessToken = optionalString(value.accessToken);
   const id = optionalString(value.user.id);
+  const nextStep = parseNextStep(value.nextStep);
 
-  if (!accessToken || !id) {
+  if (!id || !nextStep || (nextStep !== "CONFIRM_EMAIL" && !accessToken)) {
     return null;
   }
 
@@ -51,6 +67,9 @@ export function parseLoginResponse(value: unknown): LoginResponse | null {
       id,
       email: optionalString(value.user.email),
     },
+    requiresEmailConfirmation: value.requiresEmailConfirmation === true,
+    requiresProfile: value.requiresProfile === true,
+    nextStep,
   };
 }
 

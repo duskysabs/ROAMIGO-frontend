@@ -51,6 +51,7 @@ export const siteConfig = {
   ] satisfies NavigationItem[],
   authentication: {
     login: { label: "Log in", href: "/auth/login" },
+    signup: { label: "Create account", href: "/auth/signup" },
   },
   home: {
     eyebrow: "Driver-included Cebu travel",

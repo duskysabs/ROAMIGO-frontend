@@ -4,8 +4,9 @@ import { type FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/button";
 
-type LoginError = {
+type LoginResult = {
   message?: string;
+  nextStep?: "APPLICATION" | "COMPLETE_PROFILE" | "CONFIRM_EMAIL";
 };
 
 export default function LoginForm({
@@ -34,15 +35,20 @@ export default function LoginForm({
         body: JSON.stringify({ email, password }),
       });
 
+      const body = (await response.json().catch(() => null)) as LoginResult | null;
+
       if (!response.ok) {
-        const body = (await response.json().catch(() =>
-          null,
-        )) as LoginError | null;
         setError(body?.message ?? "Unable to log in. Please try again.");
         return;
       }
 
-      router.replace(redirectTo);
+      if (body?.nextStep === "COMPLETE_PROFILE") {
+        router.replace(
+          `/auth/complete-profile?next=${encodeURIComponent(redirectTo)}`,
+        );
+      } else {
+        router.replace(redirectTo);
+      }
       router.refresh();
     } catch {
       setError("Unable to reach the login service. Please try again.");

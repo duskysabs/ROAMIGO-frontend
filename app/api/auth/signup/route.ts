@@ -37,55 +37,64 @@ export async function POST(request: Request) {
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const password = typeof body.password === "string" ? body.password : "";
 
-  if (!EMAIL_PATTERN.test(email) || !password || password.length > 1024) {
-    return errorResponse("Enter a valid email address and password.", 400);
+  if (
+    !EMAIL_PATTERN.test(email) ||
+    password.length < 8 ||
+    password.length > 128
+  ) {
+    return errorResponse(
+      "Use a valid email address and a password between 8 and 128 characters.",
+      400,
+    );
   }
 
   try {
-    const backendResponse = await backendRequest<unknown>("auth/login", {
+    const backendResponse = await backendRequest<unknown>("auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    const login = parseAuthenticationResponse(backendResponse);
+    const signup = parseAuthenticationResponse(backendResponse);
 
-    if (!login?.accessToken) {
-      return errorResponse("The login service returned an invalid response.", 502);
+    if (!signup) {
+      return errorResponse(
+        "The signup service returned an invalid response.",
+        502,
+      );
     }
 
-    await setAccessToken(login.accessToken, login.expiresIn);
+    if (signup.accessToken) {
+      await setAccessToken(signup.accessToken, signup.expiresIn);
+    }
 
     return NextResponse.json(
       {
-        user: login.user,
-        requiresProfile: login.requiresProfile,
-        nextStep: login.nextStep,
+        user: signup.user,
+        requiresEmailConfirmation: signup.requiresEmailConfirmation,
+        requiresProfile: signup.requiresProfile,
+        nextStep: signup.nextStep,
       },
-      { headers: { "Cache-Control": "no-store" } },
+      { status: 201, headers: { "Cache-Control": "no-store" } },
     );
   } catch (error) {
     if (error instanceof BackendRequestError) {
-      if (error.status === 401) {
-        return errorResponse("Incorrect email address or password.", 401);
-      }
-
-      if (error.status === 403) {
+      if (error.status === 400 || error.status === 409) {
         return errorResponse(
-          "This account is not available. Please contact Planet J staff.",
-          403,
+          "We could not create this account. Try logging in if you already registered.",
+          400,
         );
       }
 
       if (error.status === 429) {
         return errorResponse(
-          "Too many login attempts. Please wait and try again.",
+          "Too many signup attempts. Please wait and try again.",
           429,
         );
       }
     }
 
     return errorResponse(
-      "The login service is temporarily unavailable. Please try again.",
+      "The signup service is temporarily unavailable. Please try again.",
       503,
     );
   }

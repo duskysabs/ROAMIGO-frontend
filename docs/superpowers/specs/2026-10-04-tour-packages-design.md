@@ -72,10 +72,11 @@ components/tour-packages/
   PackageBookingForm.tsx   # 3-step: details -> review -> confirmation (mirrors CustomTripForm.tsx)
 
 app/tour-packages/
+  layout.tsx                 # Navbar + {children} + Footer, shared by every route below (mirrors app/my-bookings/layout.tsx)
   page.tsx                  # catalog grid (server component, reads lib/tour-packages/data.ts directly)
   [slug]/page.tsx            # package detail: gallery/hero image, itinerary, inclusions, price, "Book this package" CTA
-  [slug]/not-found.tsx       # unknown slug (mirrors app/my-bookings/[bookingId]/not-found.tsx)
-  [slug]/book/page.tsx       # booking form page (mirrors app/plan-a-trip/page.tsx structure: Navbar + header + form + Footer)
+  [slug]/not-found.tsx       # unknown slug (mirrors app/my-bookings/[bookingId]/not-found.tsx); also covers [slug]/book since Next.js resolves the nearest not-found.tsx up the segment tree
+  [slug]/book/page.tsx       # booking form page (header + form only — Navbar/Footer come from layout.tsx)
 ```
 
 ## Data flow

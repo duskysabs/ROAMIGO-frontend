@@ -12,13 +12,30 @@ export const tourPackages: TourPackage[] = [
       path: "/images/home/custom-trip-mantayupan-falls.jpg",
       alt: "Turquoise waterfall in Cebu's southern mountains",
     },
-    itinerary: [
-      "5:00 AM — Pickup from your accommodation",
-      "8:00 AM — Arrive in Badian, safety briefing and gear fitting",
-      "9:00 AM to 1:00 PM — Kawasan Falls canyoneering trek",
-      "1:30 PM — Lunch by the falls",
-      "3:00 PM — Return drive with a stop at a local viewpoint",
-      "6:00 PM — Drop-off",
+    gallery: [
+      {
+        path: "/images/home/custom-trip-mantayupan-falls.jpg",
+        alt: "Turquoise waterfall in Cebu's southern mountains",
+      },
+      {
+        path: "/images/home/custom-trip-mountain-view-enhanced.png",
+        alt: "Mountain landscape viewed from a Cebu countryside stop",
+      },
+      {
+        path: "/images/home/hero-planet-j-vans-enhanced.png",
+        alt: "Planet J van included with your professional driver",
+      },
+      {
+        path: "/images/home/planet-j-fleet-enhanced.png",
+        alt: "Planet J fleet of vehicles in its Cebu yard",
+      },
+    ],
+    routeStops: [
+      "Cebu City pickup point",
+      "Badian welcome center and gear fitting",
+      "Kawasan Falls canyoneering trailhead",
+      "Kawasan main falls lunch stop",
+      "Return drop-off",
     ],
     inclusions: [
       "Professional driver and air-conditioned vehicle",
@@ -41,13 +58,30 @@ export const tourPackages: TourPackage[] = [
       path: "/images/home/tour-package-cebu-coast-enhanced.png",
       alt: "Clear coastal water and an outrigger boat in Cebu",
     },
-    itinerary: [
-      "7:00 AM — Pickup from your accommodation",
-      "9:00 AM — Depart by boat from the pier",
-      "9:30 AM to 12:00 PM — Island and sandbar hopping with snorkeling stops",
-      "12:30 PM — Floating lunch",
-      "2:00 PM to 4:00 PM — Final reef stop and free time",
-      "5:30 PM — Drop-off",
+    gallery: [
+      {
+        path: "/images/home/tour-package-cebu-coast-enhanced.png",
+        alt: "Clear coastal water and an outrigger boat in Cebu",
+      },
+      {
+        path: "/images/home/tour-package-cebu-coast.jpg",
+        alt: "Coastal sandbar off Cebu with clear turquoise water",
+      },
+      {
+        path: "/images/home/hero-cebu-driver-v2.png",
+        alt: "Your professional Planet J driver in Cebu",
+      },
+      {
+        path: "/images/home/hero-driver-guests.jpg",
+        alt: "Driver assisting guests at the start of a Cebu trip",
+      },
+    ],
+    routeStops: [
+      "Cebu City pickup point",
+      "Mactan pier boat departure",
+      "Sandbar and snorkeling stop",
+      "Reef stop and floating lunch",
+      "Return drop-off",
     ],
     inclusions: [
       "Professional driver and air-conditioned vehicle",
@@ -71,13 +105,30 @@ export const tourPackages: TourPackage[] = [
       path: "/images/home/tour-package-seaside-pool.jpg",
       alt: "Seaside pool overlooking the ocean in Moalboal, Cebu",
     },
-    itinerary: [
-      "6:00 AM — Pickup from your accommodation",
-      "9:00 AM — Arrive in Moalboal, gear fitting",
-      "9:30 AM to 11:30 AM — Guided sardine run snorkel",
-      "12:00 PM — Lunch at a seaside resort",
-      "1:00 PM to 4:00 PM — Free time at the resort pool and beach",
-      "7:00 PM — Drop-off",
+    gallery: [
+      {
+        path: "/images/home/tour-package-seaside-pool.jpg",
+        alt: "Seaside pool overlooking the ocean in Moalboal, Cebu",
+      },
+      {
+        path: "/images/home/tour-package-cebu-coast.jpg",
+        alt: "Clear ocean water off Cebu's southwest coast",
+      },
+      {
+        path: "/images/home/hero-planet-j-vans.jpg",
+        alt: "Planet J van included with your professional driver",
+      },
+      {
+        path: "/images/home/planet-j-fleet.jpg",
+        alt: "Planet J fleet of vehicles in its Cebu yard",
+      },
+    ],
+    routeStops: [
+      "Cebu City pickup point",
+      "Moalboal gear fitting",
+      "Sardine run snorkel site",
+      "Seaside resort lunch and pool time",
+      "Return drop-off",
     ],
     inclusions: [
       "Professional driver and air-conditioned vehicle",

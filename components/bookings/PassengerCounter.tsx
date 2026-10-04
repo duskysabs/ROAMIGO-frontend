@@ -48,7 +48,10 @@ export default function PassengerCounter({ value, error, onChange }: PassengerCo
           aria-describedby={error ? "passengerCount-error" : undefined}
           value={text}
           onChange={(event) => {
-            const digits = event.target.value.replace(/[^0-9]/g, "");
+            // Strip leading zeros too, not just non-digits — otherwise
+            // typing "0" would sit in the field looking like an accepted
+            // value even though it's never committed as one.
+            const digits = event.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "");
             setText(digits);
             // Apply live as soon as what's typed is a valid count, instead
             // of waiting for blur/Enter — typing "20" updates the assigned

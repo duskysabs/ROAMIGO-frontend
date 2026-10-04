@@ -151,11 +151,11 @@ export default async function TourPackageDetailPage({
           </aside>
         </div>
 
-        <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
-          <Button href="/tour-packages" variant="outline" size="lg">
+        <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row">
+          <Button href="/tour-packages" variant="outline" size="lg" className="flex-1 justify-center">
             ← Back to Tour Packages
           </Button>
-          <Button href={`/tour-packages/${tourPackage.slug}/book`} size="lg">
+          <Button href={`/tour-packages/${tourPackage.slug}/book`} size="lg" className="flex-1 justify-center">
             Enter Trip Details & Choose Vehicle →
           </Button>
         </div>

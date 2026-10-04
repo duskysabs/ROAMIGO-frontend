@@ -29,7 +29,7 @@ export default function TripCostSummary({
           </dd>
         </div>
         <div className="flex items-center justify-between gap-4">
-          <dt className="text-muted-foreground">Selected Vehicle</dt>
+          <dt className="text-muted-foreground">Assigned Vehicle</dt>
           <dd className="font-medium text-foreground">
             {cost ? formatCurrency(cost.vehicleModifier) : "-"}
           </dd>

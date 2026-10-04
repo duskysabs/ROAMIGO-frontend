@@ -25,7 +25,6 @@ export type BookingDraft = {
   pickupLocation: string;
   specialRequests: string;
   passengerCount: number | null;
-  vehicleId: string;
 };
 
 export type BookingErrors = Record<string, string>;
@@ -45,6 +44,5 @@ export function createEmptyBookingDraft(): BookingDraft {
     pickupLocation: "",
     specialRequests: "",
     passengerCount: 1,
-    vehicleId: "",
   };
 }

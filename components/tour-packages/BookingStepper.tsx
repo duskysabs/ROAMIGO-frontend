@@ -1,6 +1,6 @@
 const steps = [
   { label: "Package Details", description: "Route, schedule, and preferences." },
-  { label: "Customize & Choose Vehicle", description: "Adjust route and select a vehicle." },
+  { label: "Customize Trip Details", description: "Adjust your travel date, passengers, and pickup." },
   { label: "Review & Submit", description: "Review and submit booking." },
   { label: "Payment", description: "Complete your payment securely." },
 ] as const;

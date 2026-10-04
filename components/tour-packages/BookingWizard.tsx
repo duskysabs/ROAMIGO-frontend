@@ -5,9 +5,9 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 import PassengerCounter from "@/components/bookings/PassengerCounter";
 import TripDatePicker from "@/components/bookings/TripDatePicker";
 import TripTimePicker from "@/components/bookings/TripTimePicker";
+import AssignedVehicle from "@/components/tour-packages/AssignedVehicle";
 import BookingStepper from "@/components/tour-packages/BookingStepper";
 import TripCostSummary from "@/components/tour-packages/TripCostSummary";
-import VehiclePicker from "@/components/tour-packages/VehiclePicker";
 import Button from "@/components/ui/button";
 import FormField from "@/components/ui/form-field";
 import Input from "@/components/ui/input";
@@ -22,7 +22,7 @@ import {
   type TourPackage,
 } from "@/lib/tour-packages/types";
 import { validateBookingDetails } from "@/lib/tour-packages/validation";
-import { getRecommendedVehicle, getVehicleType } from "@/lib/tour-packages/vehicles";
+import { getRecommendedVehicle } from "@/lib/tour-packages/vehicles";
 
 function formatTravelDate(value: string): string {
   const [year, month, day] = value.split("-").map(Number);
@@ -50,7 +50,10 @@ export default function BookingWizard({
   const [errors, setErrors] = useState<BookingErrors>({});
   const heading = useRef<HTMLHeadingElement>(null);
   const errorSummary = useRef<HTMLDivElement>(null);
-  const selectedVehicle = draft.vehicleId ? getVehicleType(draft.vehicleId) ?? null : null;
+  // The vehicle is always derived from passenger count — there is no
+  // user-facing "choose a vehicle" step, so nothing needs to be stored.
+  const assignedVehicle = getRecommendedVehicle(draft.passengerCount ?? 1);
+  const cost = calculateTripCost(tourPackage, draft.passengerCount ?? 1, assignedVehicle);
   const [bookingReference] = useState(
     () => `TP-${Date.now().toString(36).toUpperCase()}`,
   );
@@ -67,11 +70,6 @@ export default function BookingWizard({
     const detailErrors = validateBookingDetails(draft, tourPackage);
     setErrors(detailErrors);
     if (Object.keys(detailErrors).length) return;
-
-    if (!draft.vehicleId) {
-      const recommended = getRecommendedVehicle(draft.passengerCount ?? 1);
-      setDraft({ ...draft, vehicleId: recommended.id });
-    }
     setStep("review");
   }
 
@@ -204,17 +202,13 @@ export default function BookingWizard({
             </div>
 
             <div className="rounded-2xl border border-border bg-background p-6">
-              <VehiclePicker
-                passengerCount={draft.passengerCount ?? 1}
-                selectedVehicleId={draft.vehicleId}
-                onSelect={(vehicleId) => setDraft({ ...draft, vehicleId })}
-              />
+              <AssignedVehicle vehicle={assignedVehicle} />
             </div>
 
             <TripCostSummary
               tourPackage={tourPackage}
               passengerCount={draft.passengerCount}
-              vehicle={selectedVehicle}
+              vehicle={assignedVehicle}
             />
           </div>
 
@@ -227,9 +221,6 @@ export default function BookingWizard({
       </div>
     );
   }
-
-  const vehicleForReview = selectedVehicle ?? getRecommendedVehicle(draft.passengerCount ?? 1);
-  const cost = calculateTripCost(tourPackage, draft.passengerCount ?? 1, vehicleForReview);
 
   if (step === "review") {
   return (
@@ -289,18 +280,12 @@ export default function BookingWizard({
 
         <div className="space-y-6">
           <div className="rounded-2xl border border-border bg-background p-6">
-            <h2 className="text-sm font-bold uppercase tracking-wide text-foreground">
-              Preferred Vehicle
-            </h2>
-            <p className="mt-3 font-bold text-foreground">{vehicleForReview.name}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Recommended for route conditions, group size, and trip duration.
-            </p>
+            <AssignedVehicle vehicle={assignedVehicle} />
           </div>
           <TripCostSummary
             tourPackage={tourPackage}
             passengerCount={draft.passengerCount}
-            vehicle={vehicleForReview}
+            vehicle={assignedVehicle}
           />
         </div>
 
@@ -562,7 +547,7 @@ export default function BookingWizard({
           ["Booking reference", bookingReference],
           ["Travel date", formatTravelDate(draft.travelDate)],
           ["Passengers", String(draft.passengerCount ?? "")],
-          ["Vehicle", vehicleForReview.name],
+          ["Vehicle", assignedVehicle.name],
           ["Total paid", formatCurrency(cost.total)],
         ].map(([label, value]) => (
           <div key={label}>

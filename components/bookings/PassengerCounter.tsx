@@ -29,10 +29,23 @@ export default function PassengerCounter({ value, error, onChange }: PassengerCo
     }
   }
 
+  // Shown immediately while the field is blank (which is also where "0"
+  // ends up, since leading zeros are stripped) — not just after the form
+  // is submitted. Falls back to whatever the parent's own validation
+  // passed in, e.g. an over-capacity error.
+  const liveError = text.trim() === "" ? "At least 1 passenger." : undefined;
+  const displayError = liveError ?? error;
+
   return (
     <div>
       <p id="passengerCount-label" className="text-sm font-semibold text-foreground">Passengers</p>
-      <div className="mt-2 inline-grid min-h-12 grid-cols-[3rem_5rem_3rem] overflow-hidden rounded-xl border border-border bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+      <div
+        className={`mt-2 inline-grid min-h-12 grid-cols-[3rem_5rem_3rem] overflow-hidden rounded-xl border bg-background focus-within:ring-2 ${
+          displayError
+            ? "border-danger focus-within:border-danger focus-within:ring-danger/20"
+            : "border-border focus-within:border-primary focus-within:ring-primary/20"
+        }`}
+      >
         <button type="button" aria-label="Remove one passenger" disabled={value <= 1}
           onClick={() => onChange(Math.max(1, value - 1))}
           className="flex items-center justify-center border-r border-border text-xl font-semibold text-primary transition-colors hover:bg-surface-warm disabled:cursor-not-allowed disabled:text-border">
@@ -44,8 +57,8 @@ export default function PassengerCounter({ value, error, onChange }: PassengerCo
           inputMode="numeric"
           pattern="[0-9]*"
           aria-labelledby="passengerCount-label"
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? "passengerCount-error" : undefined}
+          aria-invalid={Boolean(displayError)}
+          aria-describedby={displayError ? "passengerCount-error" : undefined}
           value={text}
           onChange={(event) => {
             // Strip leading zeros too, not just non-digits — otherwise
@@ -75,7 +88,11 @@ export default function PassengerCounter({ value, error, onChange }: PassengerCo
           +
         </button>
       </div>
-      {error && <p id="passengerCount-error" className="mt-2 text-sm text-red-800">{error}</p>}
+      {displayError && (
+        <p id="passengerCount-error" className="mt-2 text-sm text-red-800">
+          {displayError}
+        </p>
+      )}
     </div>
   );
 }

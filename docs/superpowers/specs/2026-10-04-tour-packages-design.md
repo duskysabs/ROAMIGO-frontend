@@ -118,6 +118,7 @@ lib/tour-packages/
 
 components/tour-packages/
   PackageCard.tsx            # unchanged (catalog grid card)
+  BookingStepper.tsx          # shared 4-step header, used by [slug]/page.tsx (static) and BookingWizard (reactive to step)
   VehicleIcon.tsx             # shared inline SVG icon used by every vehicle card
   VehiclePicker.tsx           # recommended + "other eligible" vehicle cards, used in Customize step
   TripCostSummary.tsx         # Base Package / Selected Vehicle / Total Price box, used in Customize + Review

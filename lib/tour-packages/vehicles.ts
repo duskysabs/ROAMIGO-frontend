@@ -7,6 +7,12 @@ export const vehicleTypes: VehicleType[] = [
   { id: "coaster", name: "Coaster", capacity: 28, priceModifier: 2500 },
 ];
 
+// The passenger-count ceiling across every booking: no vehicle in the
+// fleet can seat more than this, regardless of which package is booked.
+export const maxVehicleCapacity = Math.max(
+  ...vehicleTypes.map((vehicle) => vehicle.capacity),
+);
+
 export function getEligibleVehicles(
   passengerCount: number,
   vehicles: readonly VehicleType[] = vehicleTypes,

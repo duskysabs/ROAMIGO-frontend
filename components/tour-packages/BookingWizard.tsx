@@ -67,7 +67,7 @@ export default function BookingWizard({
 
   function handleCustomizeSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const detailErrors = validateBookingDetails(draft, tourPackage);
+    const detailErrors = validateBookingDetails(draft);
     setErrors(detailErrors);
     if (Object.keys(detailErrors).length) return;
     setStep("review");

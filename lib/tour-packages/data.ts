@@ -45,7 +45,6 @@ export const tourPackages: TourPackage[] = [
     ],
     duration: "Full day, about 13 hours",
     pricePerPerson: 2800,
-    maxPassengers: 12,
   },
   {
     slug: "cebu-coastal-island-hopping",
@@ -92,7 +91,6 @@ export const tourPackages: TourPackage[] = [
     ],
     duration: "Full day, about 10 hours",
     pricePerPerson: 2200,
-    maxPassengers: 15,
   },
   {
     slug: "moalboal-seaside-sardine-run",
@@ -138,7 +136,6 @@ export const tourPackages: TourPackage[] = [
     ],
     duration: "Full day, about 13 hours",
     pricePerPerson: 2500,
-    maxPassengers: 12,
   },
 ];
 

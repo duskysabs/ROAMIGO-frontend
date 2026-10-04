@@ -9,7 +9,6 @@ export type TourPackage = {
   inclusions: string[];
   duration: string;
   pricePerPerson: number;
-  maxPassengers: number;
 };
 
 export type VehicleType = {

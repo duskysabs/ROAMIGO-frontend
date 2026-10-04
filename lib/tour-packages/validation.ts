@@ -1,4 +1,5 @@
-import type { BookingDraft, BookingErrors, TourPackage } from "./types";
+import type { BookingDraft, BookingErrors } from "./types";
+import { maxVehicleCapacity } from "./vehicles";
 
 // Parses a "YYYY-MM-DD" value as local midnight, matching TripDatePicker's
 // own parsing — `new Date("YYYY-MM-DD")` would parse it as UTC midnight
@@ -12,7 +13,6 @@ function parseLocalDate(value: string): number | null {
 
 export function validateBookingDetails(
   draft: BookingDraft,
-  tourPackage: TourPackage,
   now = Date.now(),
 ): BookingErrors {
   const errors: BookingErrors = {};
@@ -31,8 +31,8 @@ export function validateBookingDetails(
     draft.passengerCount < 1
   ) {
     errors.passengerCount = "Enter a whole number of passengers, at least 1.";
-  } else if (draft.passengerCount > tourPackage.maxPassengers) {
-    errors.passengerCount = `This package allows up to ${tourPackage.maxPassengers} passengers.`;
+  } else if (draft.passengerCount > maxVehicleCapacity) {
+    errors.passengerCount = `Enter up to ${maxVehicleCapacity} passengers — our largest vehicle's capacity.`;
   }
 
   if (!draft.pickupLocation.trim()) {

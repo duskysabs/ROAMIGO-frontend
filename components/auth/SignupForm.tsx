@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { type FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/ui/button";
+import { Alert, Button, FormField, Input } from "@/components/ui";
 
 type SignupResult = {
   message?: string;
@@ -85,10 +85,7 @@ export default function SignupForm({
 
   if (confirmationEmail) {
     return (
-      <div
-        role="status"
-        className="mt-6 rounded-2xl border border-primary/20 bg-surface-warm p-5"
-      >
+      <Alert className="mt-6 p-5" variant="success">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
           <span aria-hidden="true" className="text-lg font-bold">
             ✓
@@ -107,20 +104,14 @@ export default function SignupForm({
         >
           Continue to login
         </Link>
-      </div>
+      </Alert>
     );
   }
 
   return (
     <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
-      <div>
-        <label
-          htmlFor="signup-email"
-          className="text-sm font-semibold text-foreground"
-        >
-          Email address
-        </label>
-        <input
+      <FormField htmlFor="signup-email" label="Email address">
+        <Input
           id="signup-email"
           name="email"
           type="email"
@@ -130,9 +121,8 @@ export default function SignupForm({
           maxLength={254}
           disabled={isSubmitting}
           placeholder="customer@example.com"
-          className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none transition placeholder:text-muted-foreground/75 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
         />
-      </div>
+      </FormField>
 
       <div>
         <label
@@ -142,7 +132,7 @@ export default function SignupForm({
           Password
         </label>
         <div className="relative mt-2">
-          <input
+          <Input
             id="signup-password"
             name="password"
             type={showPassword ? "text" : "password"}
@@ -152,7 +142,7 @@ export default function SignupForm({
             maxLength={128}
             disabled={isSubmitting}
             aria-describedby="password-requirements"
-            className="min-h-12 w-full rounded-xl border border-border bg-background py-3 pl-4 pr-20 text-base outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
+            className="pr-20"
           />
           <button
             type="button"
@@ -180,7 +170,7 @@ export default function SignupForm({
         >
           Confirm password
         </label>
-        <input
+        <Input
           id="signup-password-confirmation"
           name="passwordConfirmation"
           type={showPassword ? "text" : "password"}
@@ -189,19 +179,11 @@ export default function SignupForm({
           minLength={8}
           maxLength={128}
           disabled={isSubmitting}
-          className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
+          className="mt-2"
         />
       </div>
 
-      {error && (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"
-        >
-          {error}
-        </div>
-      )}
+      {error && <Alert variant="danger">{error}</Alert>}
 
       <Button
         type="submit"

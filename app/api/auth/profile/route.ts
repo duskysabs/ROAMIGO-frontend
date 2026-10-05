@@ -61,7 +61,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const profile = await backendRequest<unknown>("user-profiles/me", {
+    const profile = await backendRequest<unknown>("user-profiles/me/complete", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,

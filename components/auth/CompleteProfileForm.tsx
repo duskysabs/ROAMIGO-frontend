@@ -2,7 +2,7 @@
 
 import { type FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/ui/button";
+import { Alert, Button, FormField, Input, Textarea } from "@/components/ui";
 
 type ProfileResponse = { message?: string };
 
@@ -63,69 +63,40 @@ export default function CompleteProfileForm({
   return (
     <form className="mt-6 space-y-5" onSubmit={handleSubmit} noValidate>
       <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label
-            htmlFor="firstName"
-            className="text-sm font-semibold text-foreground"
-          >
-            First name
-          </label>
-          <input
+        <FormField htmlFor="firstName" label="First name">
+          <Input
             id="firstName"
             name="firstName"
             autoComplete="given-name"
             required
             maxLength={100}
             disabled={isSubmitting}
-            className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
           />
-        </div>
-        <div>
-          <label
-            htmlFor="lastName"
-            className="text-sm font-semibold text-foreground"
-          >
-            Last name
-          </label>
-          <input
+        </FormField>
+        <FormField htmlFor="lastName" label="Last name">
+          <Input
             id="lastName"
             name="lastName"
             autoComplete="family-name"
             required
             maxLength={100}
             disabled={isSubmitting}
-            className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
           />
-        </div>
+        </FormField>
       </div>
 
-      <div>
-        <label
-          htmlFor="birthDate"
-          className="text-sm font-semibold text-foreground"
-        >
-          Birth date{" "}
-          <span className="font-normal text-muted-foreground">(optional)</span>
-        </label>
-        <input
+      <FormField htmlFor="birthDate" label="Birth date" optional>
+        <Input
           id="birthDate"
           name="birthDate"
           type="date"
           autoComplete="bday"
           disabled={isSubmitting}
-          className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label
-          htmlFor="homeAddress"
-          className="text-sm font-semibold text-foreground"
-        >
-          Home address{" "}
-          <span className="font-normal text-muted-foreground">(optional)</span>
-        </label>
-        <textarea
+      <FormField htmlFor="homeAddress" label="Home address" optional>
+        <Textarea
           id="homeAddress"
           name="homeAddress"
           autoComplete="street-address"
@@ -133,19 +104,10 @@ export default function CompleteProfileForm({
           maxLength={255}
           disabled={isSubmitting}
           placeholder="Street, barangay, city, province"
-          className="mt-2 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none placeholder:text-muted-foreground/75 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
         />
-      </div>
+      </FormField>
 
-      {error && (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"
-        >
-          {error}
-        </div>
-      )}
+      {error && <Alert variant="danger">{error}</Alert>}
 
       <Button
         type="submit"

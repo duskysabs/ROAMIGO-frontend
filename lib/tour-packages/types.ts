@@ -1,21 +1,29 @@
+export type TourPackageStop = {
+  sequenceNumber: number;
+  stopType: string;
+  locationName: string;
+  activity: string | null;
+  formattedAddress: string;
+  latitude: string;
+  longitude: string;
+  plannedStopMinutes: number;
+};
+
 export type TourPackage = {
-  slug: string;
-  title: string;
-  shortDescription: string;
+  id: string;
+  name: string;
   description: string;
+  basePrice: number;
+  estimatedDurationMinutes: number;
+  stops: TourPackageStop[];
   heroImage: { path: string; alt: string };
   gallery: { path: string; alt: string }[];
-  routeStops: string[];
-  inclusions: string[];
-  duration: string;
-  pricePerPerson: number;
 };
 
 export type VehicleType = {
   id: string;
   name: string;
-  capacity: number;
-  priceModifier: number;
+  maximumPassengerCapacity: number;
 };
 
 export type BookingDraft = {
@@ -24,17 +32,25 @@ export type BookingDraft = {
   pickupLocation: string;
   specialRequests: string;
   passengerCount: number | null;
+  vehicleTypeId: string;
 };
 
 export type BookingErrors = Record<string, string>;
+export type BookingWizardStep = "customize" | "review" | "submitted";
 
-export type BookingWizardStep =
-  | "customize"
-  | "review"
-  | "payment-select"
-  | "payment-qr"
-  | "verifying"
-  | "verified";
+export type BookingQuote = {
+  quoteId: string;
+  currency: string;
+  totalDistanceKm: string;
+  estimatedDurationMinutes: number;
+  finalQuotedPrice: string;
+  expiresAt: string;
+};
+
+export type SubmittedBooking = {
+  id: string;
+  bookingStatus: string;
+};
 
 export function createEmptyBookingDraft(): BookingDraft {
   return {
@@ -43,5 +59,6 @@ export function createEmptyBookingDraft(): BookingDraft {
     pickupLocation: "",
     specialRequests: "",
     passengerCount: 1,
+    vehicleTypeId: "",
   };
 }

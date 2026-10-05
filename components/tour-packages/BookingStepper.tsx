@@ -1,14 +1,13 @@
 const steps = [
   { label: "Package Details", description: "Route, schedule, and preferences." },
-  { label: "Customize Trip Details", description: "Adjust your travel date, passengers, and pickup." },
-  { label: "Review & Submit", description: "Review and submit booking." },
-  { label: "Payment", description: "Complete your payment securely." },
+  { label: "Customize Trip", description: "Choose your schedule and vehicle preference." },
+  { label: "Review Request", description: "Review the quotation before submitting." },
 ] as const;
 
 export default function BookingStepper({
   currentIndex,
 }: {
-  currentIndex: 0 | 1 | 2 | 3;
+  currentIndex: 0 | 1 | 2;
 }) {
   return (
     <ol

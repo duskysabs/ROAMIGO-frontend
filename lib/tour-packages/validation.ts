@@ -1,8 +1,8 @@
 import type { BookingDraft, BookingErrors } from "./types";
-import { maxVehicleCapacity } from "./vehicles";
+import type { VehicleType } from "./types";
 
 // Parses a "YYYY-MM-DD" value as local midnight, matching TripDatePicker's
-// own parsing — `new Date("YYYY-MM-DD")` would parse it as UTC midnight
+// own parsing. `new Date("YYYY-MM-DD")` would parse it as UTC midnight
 // instead, which drifts by a timezone offset from what the picker displays.
 function parseLocalDate(value: string): number | null {
   const [year, month, day] = value.split("-").map(Number);
@@ -13,6 +13,7 @@ function parseLocalDate(value: string): number | null {
 
 export function validateBookingDetails(
   draft: BookingDraft,
+  vehicleTypes: VehicleType[],
   now = Date.now(),
 ): BookingErrors {
   const errors: BookingErrors = {};
@@ -25,14 +26,29 @@ export function validateBookingDetails(
     errors.travelDate = "Travel date must be in the future.";
   }
 
+  if (!draft.preferredStartTime) {
+    errors.preferredStartTime = "Choose a preferred start time.";
+  }
+
+  const selectedVehicle = vehicleTypes.find(
+    (vehicleType) => vehicleType.id === draft.vehicleTypeId,
+  );
+
   if (
     draft.passengerCount === null ||
     !Number.isSafeInteger(draft.passengerCount) ||
     draft.passengerCount < 1
   ) {
     errors.passengerCount = "Enter a whole number of passengers, at least 1.";
-  } else if (draft.passengerCount > maxVehicleCapacity) {
-    errors.passengerCount = `Enter up to ${maxVehicleCapacity} passengers — our largest vehicle's capacity.`;
+  } else if (
+    selectedVehicle &&
+    draft.passengerCount > selectedVehicle.maximumPassengerCapacity
+  ) {
+    errors.passengerCount = "The selected vehicle cannot accommodate this group.";
+  }
+
+  if (!selectedVehicle) {
+    errors.vehicleTypeId = "Choose a vehicle preference.";
   }
 
   if (!draft.pickupLocation.trim()) {

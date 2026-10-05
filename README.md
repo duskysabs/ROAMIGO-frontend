@@ -15,6 +15,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Shared frontend components are documented in
+[`docs/FRONTEND_DESIGN.md`](docs/FRONTEND_DESIGN.md) and displayed at
+[`/component-showcase`](http://localhost:3000/component-showcase).
+
 The frontend handles browser sessions through same-origin route handlers. The
 NestJS backend remains responsible for validating credentials, access tokens,
 account status, and role authorization.

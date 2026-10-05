@@ -11,6 +11,15 @@
   --surface-warm: #fdf1ea;
   --muted-foreground: #6b7280;
   --border: #e5e7eb;
+  --success: #067647;
+  --success-surface: #ecfdf3;
+  --success-border: #abefc6;
+  --warning: #93370d;
+  --warning-surface: #fffaeb;
+  --warning-border: #fedf89;
+  --danger: #b42318;
+  --danger-surface: #fef3f2;
+  --danger-border: #fecdca;
 }
 
 @theme inline {
@@ -22,6 +31,15 @@
   --color-surface-warm: var(--surface-warm);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-success-border: var(--success-border);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --color-warning-border: var(--warning-border);
+  --color-danger: var(--danger);
+  --color-danger-surface: var(--danger-surface);
+  --color-danger-border: var(--danger-border);
 }
 
 body {

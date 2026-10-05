@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import PassengerCounter from "@/components/bookings/PassengerCounter";
 import TripDatePicker from "@/components/bookings/TripDatePicker";
@@ -85,6 +86,7 @@ export default function BookingWizard({
   tourPackage: TourPackage;
   vehicleTypes: VehicleType[];
 }) {
+  const router = useRouter();
   const [step, setStep] = useState<BookingWizardStep>("customize");
   const [draft, setDraft] = useState<BookingDraft>(createEmptyBookingDraft);
   const [errors, setErrors] = useState<BookingErrors>({});
@@ -122,8 +124,9 @@ export default function BookingWizard({
       });
       const body = await response.json().catch(() => null);
       if (response.status === 401) {
-        window.location.href =
-          "/auth/login?next=" + encodeURIComponent(window.location.pathname);
+        router.push(
+          "/auth/login?next=" + encodeURIComponent(window.location.pathname),
+        );
         return;
       }
       if (!response.ok || !isBookingQuote(body)) {
@@ -157,8 +160,9 @@ export default function BookingWizard({
       });
       const body = await response.json().catch(() => null);
       if (response.status === 401) {
-        window.location.href =
-          "/auth/login?next=" + encodeURIComponent(window.location.pathname);
+        router.push(
+          "/auth/login?next=" + encodeURIComponent(window.location.pathname),
+        );
         return;
       }
       if (!response.ok || !isSubmittedBooking(body)) {

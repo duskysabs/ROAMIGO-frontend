@@ -5,6 +5,7 @@ import Button from "@/components/ui/button";
 import { BackendRequestError } from "@/lib/api/backend";
 import { getSessionState } from "@/lib/auth/session";
 import { getTourPackage, getVehicleTypes } from "@/lib/tour-packages/server";
+import type { TourPackage, VehicleType } from "@/lib/tour-packages/types";
 
 export const metadata: Metadata = {
   title: "Request a Tour Package | ROAMIGO",
@@ -35,22 +36,23 @@ export default async function TourPackageBookPage({
     );
   }
 
+  let tourPackage: TourPackage | null = null;
+  let vehicleTypes: VehicleType[] = [];
+  let loadingFailed = false;
+
   try {
-    const [tourPackage, vehicleTypes] = await Promise.all([
+    [tourPackage, vehicleTypes] = await Promise.all([
       getTourPackage(slug),
       getVehicleTypes(),
     ]);
-
-    return (
-      <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-8 sm:px-8 sm:py-10">
-        <BookingWizard tourPackage={tourPackage} vehicleTypes={vehicleTypes} />
-      </main>
-    );
   } catch (error) {
     if (error instanceof BackendRequestError && error.status === 404) {
       notFound();
     }
+    loadingFailed = true;
+  }
 
+  if (loadingFailed || !tourPackage) {
     return (
       <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-10 sm:px-8">
         <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center">
@@ -61,4 +63,10 @@ export default async function TourPackageBookPage({
       </main>
     );
   }
+
+  return (
+    <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-8 sm:px-8 sm:py-10">
+      <BookingWizard tourPackage={tourPackage} vehicleTypes={vehicleTypes} />
+    </main>
+  );
 }

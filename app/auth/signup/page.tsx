@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import LoginForm from "@/components/auth/LoginForm";
+import SignupForm from "@/components/auth/SignupForm";
 import { safeRedirectPath } from "@/lib/auth/redirect";
 import { getSessionState } from "@/lib/auth/session";
 
-export default async function LoginPage({
+export default async function SignupPage({
   searchParams,
 }: {
   searchParams: Promise<{ next?: string | string[] }>;
@@ -24,14 +24,11 @@ export default async function LoginPage({
             Customer portal
           </p>
           <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
-            Welcome back.
-            <span className="block text-primary">
-              Let&apos;s get you on the road.
-            </span>
+            Your Cebu trips.
+            <span className="block text-primary">All in one place.</span>
           </h1>
           <p className="mt-5 max-w-md text-lg leading-8 text-muted-foreground">
-            Manage your booking requests, payments, and upcoming trips in one
-            place.
+            Create an account to request trips and keep track of your bookings.
           </p>
         </div>
 
@@ -40,21 +37,20 @@ export default async function LoginPage({
             ROAMIGO
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground md:mt-0 md:text-2xl">
-            <span className="md:hidden">Welcome back</span>
-            <span className="hidden md:inline">Log in to ROAMIGO</span>
+            Create your account
           </h1>
           <p className="mt-2 text-base leading-7 text-muted-foreground">
-            Enter your account details to manage your trips.
+            Sign up with your email, then add the details needed for your trips.
           </p>
 
-          <LoginForm redirectTo={redirectTo} />
+          <SignupForm redirectTo={redirectTo} />
           <p className="mt-5 text-center text-sm text-muted-foreground">
-            New to ROAMIGO?{" "}
+            Already have an account?{" "}
             <Link
-              href={`/auth/signup?next=${encodeURIComponent(redirectTo)}`}
+              href={`/auth/login?next=${encodeURIComponent(redirectTo)}`}
               className="font-semibold text-primary hover:underline"
             >
-              Create an account
+              Log in
             </Link>
           </p>
         </div>

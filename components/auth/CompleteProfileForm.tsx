@@ -7,7 +7,7 @@ import { Alert, Button, FormField, Input, Textarea } from "@/components/ui";
 type ProfileResponse = { message?: string };
 
 export default function CompleteProfileForm({
-  redirectTo = "/customer",
+  redirectTo = "/my-bookings",
 }: {
   redirectTo?: string;
 }) {

@@ -1,23 +1,12 @@
 import { isRecord } from "@/lib/auth/types";
 
 export type BookingStop = {
-  id: string;
   sequenceNumber: number;
   stopType: string;
   locationName: string;
   formattedAddress: string;
-  activity: string | null;
-  plannedStopMinutes: number | null;
-};
-
-export type BookingPayment = {
-  id: string;
-  paymentStatus: string;
-  paymentMethod: string;
-  amount: number;
-  currency: string;
-  paidAt: string | null;
-  createdAt: string;
+  latitude: number;
+  longitude: number;
 };
 
 export type BookingRecord = {
@@ -30,20 +19,19 @@ export type BookingRecord = {
   totalDistanceKm: number;
   estimatedDurationMinutes: number;
   finalQuotedPrice: number;
-  notes: string | null;
   createdAt: string;
   vehicleType: { id: string; name: string };
   tourPackage: { id: string; name: string } | null;
   stops: BookingStop[];
-  assignmentStatus: string | null;
-  payments: BookingPayment[];
-  receivable: {
-    amountDue: number;
-    amountPaid: number;
-    outstandingBalance: number;
-    dueDate: string;
-    status: string;
-  } | null;
+  paymentStates: string[];
+  assignmentStates: string[];
+  cancellationState: string | null;
+  refundStates: string[];
+};
+
+export type BookingPage = {
+  items: BookingRecord[];
+  nextCursor: string | null;
 };
 
 function requiredString(value: unknown): string {
@@ -68,12 +56,6 @@ function requiredDateString(value: unknown): string {
   return date;
 }
 
-function optionalDateString(value: unknown): string | null {
-  return value === null || value === undefined
-    ? null
-    : requiredDateString(value);
-}
-
 function numberValue(value: unknown): number {
   const parsed = typeof value === "number" ? value : Number(value);
 
@@ -84,8 +66,12 @@ function numberValue(value: unknown): number {
   return parsed;
 }
 
-function optionalNumber(value: unknown): number | null {
-  return value === null || value === undefined ? null : numberValue(value);
+function stringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    throw new Error("Expected a string array.");
+  }
+
+  return value.map(requiredString);
 }
 
 function parseStop(value: unknown): BookingStop {
@@ -94,31 +80,12 @@ function parseStop(value: unknown): BookingStop {
   }
 
   return {
-    id: requiredString(value.id),
     sequenceNumber: numberValue(value.sequenceNumber),
     stopType: requiredString(value.stopType),
     locationName: requiredString(value.locationName),
     formattedAddress: requiredString(value.formattedAddress),
-    activity: optionalString(value.activity),
-    plannedStopMinutes: optionalNumber(value.plannedStopMinutes),
-  };
-}
-
-function parsePayment(value: unknown): BookingPayment {
-  if (!isRecord(value)) {
-    throw new Error("Invalid booking payment.");
-  }
-
-  return {
-    id: requiredString(value.id),
-    paymentStatus: requiredString(value.paymentStatus),
-    paymentMethod: requiredString(value.paymentMethod),
-    amount: numberValue(value.amount),
-    currency:
-      optionalString(value.currency)?.toUpperCase().match(/^[A-Z]{3}$/)?.[0] ??
-      "PHP",
-    paidAt: optionalDateString(value.paidAt),
-    createdAt: requiredDateString(value.createdAt),
+    latitude: numberValue(value.latitude),
+    longitude: numberValue(value.longitude),
   };
 }
 
@@ -131,31 +98,7 @@ export function parseBookingRecord(value: unknown): BookingRecord | null {
     const tourPackage = isRecord(value.tourPackage)
       ? {
           id: requiredString(value.tourPackage.id),
-          name: requiredString(value.tourPackage.packageName),
-        }
-      : null;
-    const assignments = Array.isArray(value.assignments)
-      ? value.assignments
-      : [];
-    const latestAssignment = assignments.find(isRecord);
-    const payments = Array.isArray(value.payments)
-      ? value.payments
-          .map(parsePayment)
-          .sort(
-            (left, right) =>
-              new Date(right.createdAt).getTime() -
-              new Date(left.createdAt).getTime(),
-          )
-      : [];
-    const receivable = isRecord(value.receivable)
-      ? {
-          amountDue: numberValue(value.receivable.amountDue),
-          amountPaid: numberValue(value.receivable.amountPaid),
-          outstandingBalance: numberValue(
-            value.receivable.outstandingBalance,
-          ),
-          dueDate: requiredDateString(value.receivable.dueDate),
-          status: requiredString(value.receivable.receivableStatus),
+          name: requiredString(value.tourPackage.name),
         }
       : null;
 
@@ -171,11 +114,10 @@ export function parseBookingRecord(value: unknown): BookingRecord | null {
         value.estimatedDurationMinutes,
       ),
       finalQuotedPrice: numberValue(value.finalQuotedPrice),
-      notes: optionalString(value.notes),
       createdAt: requiredDateString(value.createdAt),
       vehicleType: {
         id: requiredString(value.vehicleType.id),
-        name: requiredString(value.vehicleType.vehicleType),
+        name: requiredString(value.vehicleType.name),
       },
       tourPackage,
       stops: Array.isArray(value.stops)
@@ -183,24 +125,35 @@ export function parseBookingRecord(value: unknown): BookingRecord | null {
             (left, right) => left.sequenceNumber - right.sequenceNumber,
           )
         : [],
-      assignmentStatus: latestAssignment
-        ? optionalString(latestAssignment.assignmentStatus)
-        : null,
-      payments,
-      receivable,
+      paymentStates: stringArray(value.paymentStates),
+      assignmentStates: stringArray(value.assignmentStates),
+      cancellationState: optionalString(value.cancellationState),
+      refundStates: stringArray(value.refundStates),
     };
   } catch {
     return null;
   }
 }
 
-export function parseBookingList(value: unknown): BookingRecord[] | null {
-  if (!Array.isArray(value)) {
+export function parseBookingPage(value: unknown): BookingPage | null {
+  if (!isRecord(value) || !Array.isArray(value.items)) {
     return null;
   }
 
-  const bookings = value.map(parseBookingRecord);
-  return bookings.every((booking): booking is BookingRecord => booking !== null)
-    ? bookings
-    : null;
+  const items = value.items.map(parseBookingRecord);
+  if (!items.every((booking): booking is BookingRecord => booking !== null)) {
+    return null;
+  }
+
+  try {
+    return {
+      items,
+      nextCursor:
+        value.nextCursor === null || value.nextCursor === undefined
+          ? null
+          : requiredString(value.nextCursor),
+    };
+  } catch {
+    return null;
+  }
 }

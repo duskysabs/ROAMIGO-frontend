@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import LocationFieldShowcase from "@/components/bookings/LocationFieldShowcase";
 import {
   Alert,
   Button,
@@ -109,6 +110,10 @@ export default function ComponentShowcasePage() {
               />
             </FormField>
           </Card>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="Booking location search" description="The shared booking field supports selection, keyboard navigation, loading, empty results, and recoverable errors.">
+          <Card className="max-w-xl"><LocationFieldShowcase /></Card>
         </ShowcaseSection>
 
         <ShowcaseSection

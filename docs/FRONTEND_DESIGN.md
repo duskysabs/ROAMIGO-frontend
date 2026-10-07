@@ -36,6 +36,15 @@ When adding or materially changing a shared component:
 4. Check keyboard focus, labels, disabled behavior, errors, and mobile layout.
 5. Include screenshots in the pull request.
 
+## Booking location field
+
+- Reuse `components/bookings/LocationField.tsx` for pickup, intermediate stops, and drop-off. It composes the shared `Input` and `Button` controls with the existing booking field wrapper.
+- Search begins after 3 characters and a 450 ms delay. Requests are cancelled when input changes or the field closes. Editing a selected address clears the selected place ID.
+- Arrow keys navigate suggestions, Enter selects, Escape closes, and Tab leaves the field. Loading, empty, selected, unavailable, and rate-limit messages are announced through a status region.
+- Production search uses `/api/locations/autocomplete`, which forwards to the backend. Provider credentials stay on the backend.
+- `/component-showcase` includes a working example with a local search adapter for suggestions, a slow response, no results, service errors, and rate limits. Example place IDs are never used in the booking flow.
+- `TripQuoteSummary` is specific to the Custom Trip flow. Shared buttons, alerts, inputs, and cards retain their existing APIs.
+
 ## Pull request expectations
 
 - Explain which shared components were reused or extended.

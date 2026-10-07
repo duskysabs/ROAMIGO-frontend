@@ -96,6 +96,8 @@ export default function BookingWizard({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const errorSummary = useRef<HTMLDivElement>(null);
+  const bookingCommand = useRef<{ quoteId: string; idempotencyKey: string } | null>(null);
+  const bookingRequestInFlight = useRef(false);
   const selectedVehicle = vehicleTypes.find(
     (vehicleType) => vehicleType.id === draft.vehicleTypeId,
   );
@@ -146,17 +148,22 @@ export default function BookingWizard({
   }
 
   async function submitBookingRequest() {
-    if (!quote) return;
+    if (!quote || bookingRequestInFlight.current) return;
+    bookingRequestInFlight.current = true;
     setIsSubmitting(true);
     setRequestError(null);
     try {
+      // Reuse the command after a lost response so retries recover the same booking.
+      if (bookingCommand.current?.quoteId !== quote.quoteId) {
+        bookingCommand.current = {
+          quoteId: quote.quoteId,
+          idempotencyKey: crypto.randomUUID(),
+        };
+      }
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          quoteId: quote.quoteId,
-          idempotencyKey: crypto.randomUUID(),
-        }),
+        body: JSON.stringify(bookingCommand.current),
       });
       const body = await response.json().catch(() => null);
       if (response.status === 401) {
@@ -177,6 +184,7 @@ export default function BookingWizard({
     } catch {
       setRequestError("Unable to reach the booking service. Please try again.");
     } finally {
+      bookingRequestInFlight.current = false;
       setIsSubmitting(false);
     }
   }

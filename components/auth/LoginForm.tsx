@@ -10,7 +10,7 @@ type LoginResult = {
 };
 
 export default function LoginForm({
-  redirectTo = "/customer",
+  redirectTo = "/my-bookings",
 }: {
   redirectTo?: string;
 }) {

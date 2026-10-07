@@ -12,6 +12,11 @@ export default async function Navbar() {
           ? session.user.displayName ?? undefined
           : undefined
       }
+      customerEmail={
+        session.status === "authenticated"
+          ? session.user.email ?? undefined
+          : undefined
+      }
     />
   );
 }

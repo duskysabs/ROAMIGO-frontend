@@ -3,7 +3,7 @@ import "server-only";
 import { backendRequest, BackendRequestError } from "@/lib/api/backend";
 import { getAccessToken } from "@/lib/auth/session";
 import {
-  parseBookingList,
+  parseBookingPage,
   parseBookingRecord,
   type BookingRecord,
 } from "@/lib/bookings/records";
@@ -22,9 +22,9 @@ async function authenticatedBookingRequest(path: string): Promise<unknown> {
 
 export async function getMyBookings(): Promise<BookingRecord[]> {
   const response = await authenticatedBookingRequest("bookings/me");
-  const bookings = parseBookingList(response);
+  const page = parseBookingPage(response);
 
-  if (!bookings) {
+  if (!page) {
     throw new BackendRequestError(
       "The booking service returned an invalid response.",
       502,
@@ -32,7 +32,7 @@ export async function getMyBookings(): Promise<BookingRecord[]> {
     );
   }
 
-  return bookings;
+  return page.items;
 }
 
 export async function getMyBooking(

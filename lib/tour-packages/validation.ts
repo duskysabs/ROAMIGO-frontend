@@ -1,5 +1,6 @@
 import type { BookingDraft, BookingErrors } from "./types";
 import type { VehicleType } from "./types";
+import { earliestBookingDate } from "@/lib/bookings/schedule";
 
 // Parses a "YYYY-MM-DD" value as local midnight, matching TripDatePicker's
 // own parsing. `new Date("YYYY-MM-DD")` would parse it as UTC midnight
@@ -18,12 +19,12 @@ export function validateBookingDetails(
 ): BookingErrors {
   const errors: BookingErrors = {};
   const travelDate = parseLocalDate(draft.travelDate);
-  const startOfToday = new Date(now).setHours(0, 0, 0, 0);
+  const minimumBookingDate = earliestBookingDate(now).getTime();
 
   if (travelDate === null) {
     errors.travelDate = "Choose a travel date.";
-  } else if (travelDate < startOfToday) {
-    errors.travelDate = "Travel date must be in the future.";
+  } else if (travelDate < minimumBookingDate) {
+    errors.travelDate = "Same-day bookings are unavailable. Choose tomorrow or a later date.";
   }
 
   if (!draft.preferredStartTime) {

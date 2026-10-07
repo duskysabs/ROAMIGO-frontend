@@ -10,11 +10,13 @@ import { siteConfig } from "@/config/site";
 type PublicHeaderProps = {
   isAuthenticated?: boolean;
   customerName?: string;
+  customerEmail?: string;
 };
 
 export default function PublicHeader({
   isAuthenticated = false,
   customerName,
+  customerEmail,
 }: PublicHeaderProps) {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,6 +24,13 @@ export default function PublicHeader({
   const navigation = siteConfig.navigation.filter(
     (item) => !item.requiresAuthentication || isAuthenticated,
   );
+  const accountLabel = customerName ?? "My account";
+  const accountInitials = accountLabel
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("") || "A";
 
   function closeMenu() {
     setIsMenuOpen(false);
@@ -79,25 +88,33 @@ export default function PublicHeader({
         <div className="hidden items-center gap-3 lg:flex">
           {isAuthenticated ? (
             <>
-              <Link
-                href="/customer"
-                className="text-sm font-semibold text-foreground hover:text-primary"
-              >
-                {customerName ?? "My account"}
-              </Link>
-              <LogoutButton className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm disabled:cursor-not-allowed disabled:opacity-60" />
+              <details className="group relative">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-full border border-primary/15 bg-surface-warm/60 py-1.5 pr-3 pl-1.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
+                  <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{accountInitials}</span>
+                  <span className="max-w-32 truncate">{accountLabel}</span>
+                  <svg aria-hidden="true" viewBox="0 0 20 20" className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" fill="currentColor"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clipRule="evenodd" /></svg>
+                </summary>
+                <div className="absolute right-0 z-50 mt-3 w-72 rounded-2xl border border-border bg-background p-3 shadow-lg">
+                  <div className="px-2 py-2">
+                    <p className="truncate font-semibold text-foreground">{accountLabel}</p>
+                    {customerEmail && <p className="mt-1 truncate text-xs text-muted-foreground">{customerEmail}</p>}
+                  </div>
+                  <div className="my-2 border-t border-border" />
+                  <LogoutButton className="inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-primary px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm disabled:cursor-not-allowed disabled:opacity-60" />
+                </div>
+              </details>
             </>
           ) : (
             <>
               <Link
                 href={siteConfig.authentication.signup.href}
-                className="text-sm font-semibold text-foreground transition-colors hover:text-primary"
+                className="inline-flex min-h-10 items-center rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {siteConfig.authentication.signup.label}
               </Link>
               <Link
                 href={siteConfig.authentication.login.href}
-                className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="inline-flex min-h-10 items-center rounded-lg px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {siteConfig.authentication.login.label}
               </Link>
@@ -146,13 +163,13 @@ export default function PublicHeader({
 
           {isAuthenticated ? (
             <div className="mt-4 grid gap-3 border-t border-border pt-4">
-              <Link
-                href="/customer"
-                onClick={closeMenu}
-                className="rounded-md border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
-              >
-                {customerName ?? "My account"}
-              </Link>
+              <div className="flex min-h-11 items-center gap-3 rounded-xl border border-primary/15 bg-surface-warm/60 p-2 pr-4 text-left text-sm font-semibold text-foreground">
+                <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{accountInitials}</span>
+                <span className="min-w-0">
+                  <span className="block truncate">{accountLabel}</span>
+                  <span className="block truncate text-xs font-normal text-muted-foreground">{customerEmail ?? "Customer account"}</span>
+                </span>
+              </div>
               <LogoutButton
                 onLoggedOut={closeMenu}
                 className="rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"

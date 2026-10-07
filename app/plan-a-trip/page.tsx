@@ -2,13 +2,24 @@ import type { Metadata } from "next";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import CustomTripForm from "@/components/bookings/CustomTripForm";
+import { getVehicleTypes } from "@/lib/tour-packages/server";
+import type { VehicleTypeOption } from "@/lib/bookings/types";
+import Alert from "@/components/ui/alert";
+import Button from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Plan a Custom Trip | ROAMIGO",
   description: "Plan your schedule, route, and stops for a driver-included custom trip.",
 };
 
-export default function PlanTripPage() {
+export default async function PlanTripPage() {
+  let vehicleTypes: VehicleTypeOption[] = [];
+  let unavailable = false;
+  try {
+    vehicleTypes = await getVehicleTypes();
+  } catch {
+    unavailable = true;
+  }
   return (
     <div className="flex flex-1 flex-col">
       <Navbar />
@@ -18,7 +29,14 @@ export default function PlanTripPage() {
           <h1 className="mt-2 text-3xl font-bold sm:text-4xl">Plan a trip around you</h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">Choose your schedule and destinations. Every service includes a professional driver.</p>
         </header>
-        <CustomTripForm />
+        {unavailable || vehicleTypes.length === 0 ? (
+          <div className="mx-auto max-w-3xl space-y-4">
+            <Alert variant="warning" title={unavailable ? "Booking options are unavailable" : "No vehicle categories available"}>
+              Please try again when booking options are available.
+            </Alert>
+            <Button href="/plan-a-trip" variant="outline">Try again</Button>
+          </div>
+        ) : <CustomTripForm vehicleTypes={vehicleTypes} />}
       </main>
       <Footer compact />
     </div>

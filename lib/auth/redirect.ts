@@ -1,6 +1,6 @@
 export function safeRedirectPath(
   value: string | string[] | undefined,
-  fallback = "/customer",
+  fallback = "/my-bookings",
 ): string {
   const candidate = Array.isArray(value) ? value[0] : value;
 

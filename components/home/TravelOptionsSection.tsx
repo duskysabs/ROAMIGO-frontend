@@ -23,7 +23,7 @@ export default function TravelOptionsSection() {
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {home.travelOptions.map((option, index) => (
+          {home.travelOptions.map((option) => (
             <article
               key={option.title}
               className="group overflow-hidden rounded-2xl border border-border bg-background transition-[border-color,transform] hover:-translate-y-1 hover:border-primary/30"
@@ -37,11 +37,8 @@ export default function TravelOptionsSection() {
                   className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
                 />
               </div>
-              <div className="flex min-h-60 flex-col p-7 sm:p-8">
-                <span className="text-xs font-bold tracking-[0.18em] text-primary">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
+              <div className="flex min-h-52 flex-col p-7 sm:p-8">
+                <h3 className="text-2xl font-bold tracking-tight text-foreground">
                   {option.title}
                 </h3>
                 <p className="mt-3 max-w-lg text-sm leading-6 text-muted-foreground">

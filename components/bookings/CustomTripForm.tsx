@@ -14,9 +14,9 @@ import TripReviewStep from "./TripReviewStep";
 import TripQuoteSummary from "./TripQuoteSummary";
 
 const steps = [
-  { id: "details", label: "Trip details", description: "Choose your schedule and group size." },
-  { id: "route", label: "Route and stops", description: "Tell us where you would like to go." },
-  { id: "review", label: "Review your trip", description: "Check your route and request a quotation before submitting." },
+  { id: "details", label: "Trip Details", description: "Choose your schedule and group size." },
+  { id: "route", label: "Route and Stops", description: "Tell us where you would like to go." },
+  { id: "review", label: "Review Your Trip", description: "Check your route and request a quotation before submitting." },
 ] as const;
 
 export default function CustomTripForm({ vehicleTypes = [] }: { vehicleTypes?: readonly VehicleTypeOption[] }) {
@@ -159,7 +159,7 @@ export default function CustomTripForm({ vehicleTypes = [] }: { vehicleTypes?: r
   }
 
   if (submitted) return <div className="mx-auto max-w-3xl space-y-4">
-    <Alert variant="success" title="Booking request received">Status: {submitted.bookingStatus.replaceAll("_", " ")}. Payment and assignment are separate.</Alert>
+    <Alert variant="success" title="Booking Request Received">Status: {submitted.bookingStatus.replaceAll("_", " ")}. Payment and assignment are separate.</Alert>
     <Button href={`/my-bookings/${submitted.id}`}>View booking</Button>
   </div>;
 

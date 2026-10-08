@@ -23,7 +23,7 @@ export default function TripQuoteSummary({ route, quote, busy, uncertain, onQuot
   const metrics = quote ?? route;
   return (
     <section className="mt-6 space-y-4 rounded-xl border border-border p-5" aria-label="Route and quotation">
-      <h3 className="font-semibold">Route estimate</h3>
+      <h3 className="font-semibold">Route Estimate</h3>
       <dl className="grid grid-cols-2 gap-4 text-sm">
         <div><dt className="text-muted-foreground">Distance</dt><dd className="mt-1 font-medium">{metrics.totalDistanceKm} km</dd></div>
         <div><dt className="text-muted-foreground">Driving time</dt><dd className="mt-1 font-medium">{metrics.estimatedDurationMinutes} minutes</dd></div>

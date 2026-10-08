@@ -194,10 +194,10 @@ export default function BookingWizard({
     return (
       <div className="mx-auto max-w-2xl rounded-3xl border border-primary/20 bg-background p-6 sm:p-8">
         <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">
-          Request received
+          Request Received
         </p>
         <h1 ref={heading} tabIndex={-1} className="mt-2 text-3xl font-bold tracking-tight text-foreground outline-none">
-          Tour request submitted
+          Tour Request Submitted
         </h1>
         <p className="mt-3 text-muted-foreground">
           Submission is not final booking confirmation. Planet J will continue processing the request and its payment status separately.

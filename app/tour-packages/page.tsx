@@ -24,18 +24,18 @@ export default async function TourPackagesPage() {
     <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-10 sm:px-8 sm:py-12">
       <div className="mx-auto max-w-7xl">
         <PageHeader
-          eyebrow="Cebu tour packages"
-          title="Browse predefined Cebu itineraries"
+          eyebrow="Cebu Tour Packages"
+          title="Browse Predefined Cebu Itineraries"
           description="Browse active fixed-route packages maintained by Planet J. Choose a package to review its approved route, duration, and base price."
         />
         {isUnavailable ? (
           <div className="mt-8 rounded-2xl border border-border bg-background p-8 text-center">
-            <h2 className="text-xl font-bold text-foreground">Tour packages are unavailable</h2>
+            <h2 className="text-xl font-bold text-foreground">Tour Packages Are Unavailable</h2>
             <p className="mt-2 text-sm text-muted-foreground">Please try again after the service is available.</p>
           </div>
         ) : tourPackages.length === 0 ? (
           <div className="mt-8 rounded-2xl border border-border bg-background p-8 text-center">
-            <h2 className="text-xl font-bold text-foreground">No active packages yet</h2>
+            <h2 className="text-xl font-bold text-foreground">No Active Packages Yet</h2>
             <p className="mt-2 text-sm text-muted-foreground">Planet J has not published any tour packages.</p>
           </div>
         ) : (

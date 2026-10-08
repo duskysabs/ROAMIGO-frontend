@@ -21,10 +21,10 @@ export default async function LoginPage({
       <div className="mx-auto grid w-full max-w-5xl gap-10 md:grid-cols-2 md:items-center lg:gap-16">
         <div className="hidden md:block">
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">
-            Customer portal
+            Customer Portal
           </p>
           <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
-            Welcome back.
+            Welcome Back.
             <span className="block text-primary">
               Let&apos;s get you on the road.
             </span>
@@ -40,8 +40,8 @@ export default async function LoginPage({
             ROAMIGO
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground md:mt-0 md:text-2xl">
-            <span className="md:hidden">Welcome back</span>
-            <span className="hidden md:inline">Log in to ROAMIGO</span>
+            <span className="md:hidden">Welcome Back</span>
+            <span className="hidden md:inline">Log In to ROAMIGO</span>
           </h1>
           <p className="mt-2 text-base leading-7 text-muted-foreground">
             Enter your account details to manage your trips.

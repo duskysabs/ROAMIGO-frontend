@@ -31,7 +31,7 @@ export default async function TourPackageDetailPage({
     return (
       <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-10 sm:px-8 sm:py-12">
         <div className="mx-auto max-w-3xl rounded-2xl border border-border bg-background p-8 text-center">
-          <h1 className="text-2xl font-bold text-foreground">Package details are unavailable</h1>
+          <h1 className="text-2xl font-bold text-foreground">Package Details Are Unavailable</h1>
           <p className="mt-2 text-muted-foreground">Please try again after the service is available.</p>
           <Button href="/tour-packages" variant="outline" className="mt-6">
             Back to Tour Packages

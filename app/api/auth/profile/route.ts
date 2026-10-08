@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { backendRequest, BackendRequestError } from "@/lib/api/backend";
 import { clearAccessToken, getAccessToken } from "@/lib/auth/session";
+import { isValidPhoneNumber } from "@/lib/auth/profile";
 import { isRecord } from "@/lib/auth/types";
 
 function errorResponse(message: string, status: number) {
@@ -46,14 +47,17 @@ export async function POST(request: Request) {
 
   const firstName = optionalText(body.firstName);
   const lastName = optionalText(body.lastName);
+  const phoneNumber = optionalText(body.phoneNumber);
   const birthDate = optionalText(body.birthDate);
   const homeAddress = optionalText(body.homeAddress);
 
   if (
     !firstName ||
     !lastName ||
+    !phoneNumber ||
     firstName.length > 100 ||
     lastName.length > 100 ||
+    !isValidPhoneNumber(phoneNumber) ||
     (birthDate && !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) ||
     (homeAddress && homeAddress.length > 255)
   ) {
@@ -70,6 +74,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         firstName,
         lastName,
+        phoneNumber,
         ...(birthDate ? { birthDate } : {}),
         ...(homeAddress ? { homeAddress } : {}),
       }),

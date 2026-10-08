@@ -52,7 +52,7 @@ export default function PublicFooter({ compact = false }: { compact?: boolean })
 
         <div>
           <h2 className="text-sm font-bold text-foreground">
-            Business hours
+            Business Hours
           </h2>
           <dl className="mt-3 max-w-[18rem] divide-y divide-primary/10 text-sm text-muted-foreground">
             {siteConfig.footer.businessHours.map((schedule) => (
@@ -71,7 +71,7 @@ export default function PublicFooter({ compact = false }: { compact?: boolean })
 
         <div>
           <h2 className="text-sm font-bold text-foreground">
-            Quick links
+            Quick Links
           </h2>
           <ul className="mt-3 grid grid-cols-2 gap-x-8 gap-y-1 text-sm text-muted-foreground">
             {quickLinks.map((item) => (

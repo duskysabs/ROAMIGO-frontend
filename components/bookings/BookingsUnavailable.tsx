@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export default function BookingsUnavailable({
-  title = "We could not load your bookings",
+  title = "We Could Not Load Your Bookings",
   description = "The booking service may be temporarily unavailable. Please try again in a moment.",
 }: {
   title?: string;
@@ -10,7 +10,7 @@ export default function BookingsUnavailable({
   return (
     <div className="rounded-2xl border border-primary/15 bg-background p-6 sm:p-8">
       <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">
-        Bookings unavailable
+        Bookings Unavailable
       </p>
       <h2 className="mt-2 text-2xl font-bold tracking-tight text-foreground">
         {title}

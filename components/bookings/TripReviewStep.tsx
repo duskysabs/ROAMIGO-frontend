@@ -17,7 +17,7 @@ export default function TripReviewStep({ draft, vehicleTypes, onEdit, disabled =
     <div className="space-y-6">
       <section className="rounded-xl border border-border p-5">
         <div className="flex items-center justify-between gap-4">
-          <h3 className="font-semibold">Trip details</h3>
+          <h3 className="font-semibold">Trip Details</h3>
           <Button type="button" disabled={disabled} variant="outline" className="min-h-11 px-4 py-2 text-sm" onClick={() => onEdit("details")}>Edit details</Button>
         </div>
         <dl className="mt-5 grid gap-5 text-sm sm:grid-cols-2">
@@ -33,7 +33,7 @@ export default function TripReviewStep({ draft, vehicleTypes, onEdit, disabled =
       </section>
       <section className="rounded-xl border border-border p-5">
         <div className="flex items-center justify-between gap-4">
-          <h3 className="font-semibold">Your route</h3>
+          <h3 className="font-semibold">Your Route</h3>
           <Button type="button" disabled={disabled} variant="outline" className="min-h-11 px-4 py-2 text-sm" onClick={() => onEdit("route")}>Edit route</Button>
         </div>
         <ol className="mt-5 space-y-5">
@@ -53,7 +53,7 @@ export default function TripReviewStep({ draft, vehicleTypes, onEdit, disabled =
         {draft.notes.trim() && <div className="mt-5 border-t border-border pt-4 text-sm"><p className="font-semibold">Notes</p><p className="mt-2 whitespace-pre-wrap break-words text-muted-foreground">{draft.notes}</p></div>}
       </section>
       <aside role="status" className="rounded-xl border border-primary/20 bg-surface-warm p-5 text-sm">
-        <p className="font-semibold">Before you submit</p>
+        <p className="font-semibold">Before You Submit</p>
         <p className="mt-2 leading-relaxed text-muted-foreground">A quote does not reserve a vehicle or driver. Payment and final assignment are handled separately after submission.</p>
       </aside>
     </div>

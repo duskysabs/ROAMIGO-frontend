@@ -50,15 +50,15 @@ export const siteConfig = {
     },
   ] satisfies NavigationItem[],
   authentication: {
-    login: { label: "Log in", href: "/auth/login" },
-    signup: { label: "Create account", href: "/auth/signup" },
+    login: { label: "Log In", href: "/auth/login" },
+    signup: { label: "Create Account", href: "/auth/signup" },
   },
   home: {
-    eyebrow: "Driver-included Cebu travel",
+    eyebrow: "Driver-Included Cebu Travel",
     heading: {
       textBeforeHighlight: "Your Cebu",
-      highlightedText: "journey",
-      textAfterHighlight: "starts here.",
+      highlightedText: "Journey",
+      textAfterHighlight: "Starts Here.",
     },
     description:
       "Plan custom trips or explore Cebu tour packages, with a professional driver included.",
@@ -85,16 +85,16 @@ export const siteConfig = {
       },
     ] satisfies ContentCard[],
     fleet: {
-      eyebrow: "Planet J fleet",
-      title: "Group travel, handled professionally",
+      eyebrow: "Planet J Fleet",
+      title: "Group Travel, Handled Professionally",
       description:
         "Vehicle-driver availability is checked against your trip details before you continue to payment.",
       imagePath: "/images/home/hero-planet-j-yard-v4.png",
       alt: "Planet J fleet of buses and vans parked in its Cebu vehicle yard",
     },
     checkoutValidation: {
-      eyebrow: "Confirmed before payment",
-      items: ["Trip details", "Availability", "Final price"],
+      eyebrow: "Confirmed Before Payment",
+      items: ["Trip Details", "Availability", "Final Price"],
     },
   },
   footer: {

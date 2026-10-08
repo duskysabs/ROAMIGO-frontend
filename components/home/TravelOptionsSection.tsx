@@ -11,10 +11,10 @@ export default function TravelOptionsSection() {
       <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
-            Trip options
+            Trip Options
           </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground">
-            Choose how you want to travel
+            Choose How You Want to Travel
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
             Start with a flexible custom trip or select a prepared Cebu tour

@@ -92,7 +92,7 @@ export default function SignupForm({
           </span>
         </div>
         <h2 className="mt-4 text-xl font-bold text-foreground">
-          Check your email
+          Check Your Email
         </h2>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
           We sent a confirmation link to <strong>{confirmationEmail}</strong>.
@@ -109,7 +109,7 @@ export default function SignupForm({
   }
 
   return (
-    <form className="mt-6 space-y-5" onSubmit={handleSubmit} noValidate>
+    <form className="mt-6 space-y-4 sm:space-y-5" onSubmit={handleSubmit} noValidate>
       <FormField htmlFor="signup-email" label="Email address">
         <Input
           id="signup-email"
@@ -185,16 +185,13 @@ export default function SignupForm({
 
       {error && <Alert variant="danger">{error}</Alert>}
 
-      <div className="border-t border-border pt-5">
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="min-h-12 w-full px-5 py-3 text-base disabled:cursor-not-allowed disabled:opacity-60 sm:text-sm"
-        >
-          {isSubmitting ? "Creating account..." : "Create account and continue"}
-        </Button>
-        <p className="mt-3 text-center text-xs leading-5 text-muted-foreground">Your profile details are completed in the next step.</p>
-      </div>
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className="min-h-12 w-full px-5 py-3 text-base disabled:cursor-not-allowed disabled:opacity-60 sm:text-sm"
+      >
+        {isSubmitting ? "Creating account..." : "Create account"}
+      </Button>
     </form>
   );
 }

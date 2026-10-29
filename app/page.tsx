@@ -9,7 +9,7 @@ export default function Home() {
       <Navbar />
 
       <main className="flex-1">
-        <div className="bg-gradient-to-b from-surface-warm via-background to-background">
+        <div className="bg-linear-to-b from-surface-warm/80 via-background to-background">
           <HeroSection />
           <TravelOptionsSection />
         </div>

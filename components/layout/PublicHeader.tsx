@@ -28,7 +28,7 @@ export default function PublicHeader({
   }
 
   return (
-    <header className="border-b border-border bg-background">
+    <header className="relative z-20 border-b border-primary/10 bg-background">
       <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-5 px-6 sm:px-10">
         <Link
           href="/"
@@ -39,12 +39,12 @@ export default function PublicHeader({
           <Image
             src={siteConfig.brand.logoPath}
             alt={siteConfig.brand.companyName}
-            width={64}
-            height={64}
+            width={52}
+            height={52}
             priority
           />
           <span className="hidden sm:block">
-            <span className="block text-sm font-bold tracking-wide text-primary">
+            <span className="block text-base font-extrabold tracking-[0.12em] text-primary">
               {siteConfig.brand.systemName}
             </span>
             <span className="block text-xs text-muted-foreground">
@@ -54,7 +54,7 @@ export default function PublicHeader({
         </Link>
 
         <nav
-          className="hidden items-center gap-6 text-sm font-medium lg:flex"
+          className="hidden items-center gap-5 text-sm font-medium lg:flex"
           aria-label="Main navigation"
         >
           {navigation.map((item) => {
@@ -63,11 +63,12 @@ export default function PublicHeader({
             return (
               <Link
                 key={item.href}
+                aria-current={isActive ? "page" : undefined}
                 href={item.href}
                 className={
                   isActive
-                    ? "border-b-2 border-primary py-2 text-primary"
-                    : "border-b-2 border-transparent py-2 text-foreground/75 transition-colors hover:text-primary"
+                    ? "rounded-full bg-surface-warm px-3 py-2 text-primary"
+                    : "rounded-full px-3 py-2 text-foreground/75 transition-colors hover:bg-surface-warm hover:text-primary"
                 }
               >
                 {item.label}
@@ -85,12 +86,12 @@ export default function PublicHeader({
               >
                 {customerName ?? "My account"}
               </Link>
-              <LogoutButton className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm disabled:cursor-not-allowed disabled:opacity-60" />
+              <LogoutButton className="inline-flex min-h-10 items-center rounded-full border border-primary/25 px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm disabled:cursor-not-allowed disabled:opacity-60" />
             </>
           ) : (
             <Link
               href={siteConfig.authentication.login.href}
-              className="inline-flex min-h-10 items-center rounded-lg border border-primary px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="inline-flex min-h-10 items-center rounded-full border border-primary/25 px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               {siteConfig.authentication.login.label}
             </Link>

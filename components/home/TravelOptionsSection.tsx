@@ -13,8 +13,8 @@ export default function TravelOptionsSection() {
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
             Trip options
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground">
-            Choose how you want to travel
+          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.035em] text-foreground sm:text-4xl">
+            A trip that feels like you.
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
             Start with a flexible custom trip or select a prepared Cebu tour
@@ -23,21 +23,22 @@ export default function TravelOptionsSection() {
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {home.travelOptions.map((option) => (
+          {home.travelOptions.map((option, index) => (
             <article
               key={option.title}
-              className="group overflow-hidden rounded-2xl border border-border bg-background transition-[border-color,transform] hover:-translate-y-1 hover:border-primary/30"
+              className="group overflow-hidden rounded-3xl border border-border bg-background transition-[border-color,box-shadow] duration-300 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"
             >
-              <div className="relative aspect-[16/9] overflow-hidden bg-surface-warm">
+              <div className="relative aspect-[16/9] sm:aspect-[16/8] overflow-hidden bg-surface-warm">
                 <Image
                   src={option.imagePath}
                   alt={option.photoAlt}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
+                  className="object-cover object-center transition-transform duration-500 motion-safe:group-hover:scale-[1.04]"
                 />
               </div>
               <div className="flex min-h-52 flex-col p-7 sm:p-8">
+                <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">{index === 0 ? "01 / Make it your own" : "02 / Follow the highlights"}</p>
                 <h3 className="text-2xl font-bold tracking-tight text-foreground">
                   {option.title}
                 </h3>
@@ -58,7 +59,7 @@ export default function TravelOptionsSection() {
           ))}
         </div>
 
-        <article className="mt-6 grid overflow-hidden rounded-2xl border border-border bg-background lg:grid-cols-[1.15fr_0.85fr]">
+        <article className="mt-10 grid overflow-hidden rounded-3xl border border-primary/10 bg-surface-warm lg:grid-cols-[1.15fr_0.85fr]">
           <div className="relative min-h-72 overflow-hidden lg:min-h-80">
             <Image
               src={home.fleet.imagePath}

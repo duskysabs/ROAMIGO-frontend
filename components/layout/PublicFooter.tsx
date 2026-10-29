@@ -10,7 +10,7 @@ export default function PublicFooter({ compact = false }: { compact?: boolean })
 
   return (
     <footer className="border-t border-primary/10 bg-surface-warm">
-      <div className={`mx-auto grid max-w-[90rem] gap-8 px-6 sm:grid-cols-2 sm:px-10 lg:grid-cols-[1.3fr_1.05fr_1.15fr_1.25fr] lg:gap-10 ${compact ? "py-5" : "py-7"}`}>
+      <div className={`mx-auto grid max-w-7xl gap-8 px-6 sm:grid-cols-2 sm:px-10 lg:grid-cols-[1.3fr_1.05fr_1.15fr_1.25fr] lg:gap-10 ${compact ? "py-5" : "py-12"}`}>
         <div className="max-w-xs">
           <div className="flex items-center gap-3">
             <div className="rounded-full bg-background p-1 ring-1 ring-primary/10">
@@ -88,7 +88,7 @@ export default function PublicFooter({ compact = false }: { compact?: boolean })
         </div>
       </div>
 
-      <div className="border-t border-primary/10 bg-primary px-6 py-3 text-center text-xs leading-5 text-primary-foreground">
+      <div className="border-t border-primary/10 px-6 py-5 text-center text-xs leading-5 text-muted-foreground">
         © {currentYear} {siteConfig.brand.companyName}. All rights reserved.
         <span className="mx-2" aria-hidden="true">|</span>
         Powered by{" "}

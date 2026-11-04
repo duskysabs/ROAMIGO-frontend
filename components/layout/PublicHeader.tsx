@@ -1,0 +1,169 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import LogoutButton from "@/components/auth/LogoutButton";
+import { siteConfig } from "@/config/site";
+
+type PublicHeaderProps = {
+  isAuthenticated?: boolean;
+  customerName?: string;
+};
+
+export default function PublicHeader({
+  isAuthenticated = false,
+  customerName,
+}: PublicHeaderProps) {
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navigation = siteConfig.navigation.filter(
+    (item) => !item.requiresAuthentication || isAuthenticated,
+  );
+
+  function closeMenu() {
+    setIsMenuOpen(false);
+  }
+
+  return (
+    <header className="relative z-20 border-b border-primary/10 bg-background">
+      <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-5 px-6 sm:px-10">
+        <Link
+          href="/"
+          onClick={closeMenu}
+          className="flex items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          aria-label={`${siteConfig.brand.companyName} home`}
+        >
+          <Image
+            src={siteConfig.brand.logoPath}
+            alt={siteConfig.brand.companyName}
+            width={52}
+            height={52}
+            priority
+          />
+          <span className="hidden sm:block">
+            <span className="block text-base font-extrabold tracking-[0.12em] text-primary">
+              {siteConfig.brand.systemName}
+            </span>
+            <span className="block text-xs text-muted-foreground">
+              {siteConfig.brand.companyName}
+            </span>
+          </span>
+        </Link>
+
+        <nav
+          className="hidden items-center gap-5 text-sm font-medium lg:flex"
+          aria-label="Main navigation"
+        >
+          {navigation.map((item) => {
+            const isActive = pathname === item.href;
+
+            return (
+              <Link
+                key={item.href}
+                aria-current={isActive ? "page" : undefined}
+                href={item.href}
+                className={
+                  isActive
+                    ? "rounded-full bg-surface-warm px-3 py-2 text-primary"
+                    : "rounded-full px-3 py-2 text-foreground/75 transition-colors hover:bg-surface-warm hover:text-primary"
+                }
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="hidden items-center gap-3 lg:flex">
+          {isAuthenticated ? (
+            <>
+              <Link
+                href="/customer"
+                className="text-sm font-semibold text-foreground hover:text-primary"
+              >
+                {customerName ?? "My account"}
+              </Link>
+              <LogoutButton className="inline-flex min-h-10 items-center rounded-full border border-primary/25 px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm disabled:cursor-not-allowed disabled:opacity-60" />
+            </>
+          ) : (
+            <Link
+              href={siteConfig.authentication.login.href}
+              className="inline-flex min-h-10 items-center rounded-full border border-primary/25 px-5 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              {siteConfig.authentication.login.label}
+            </Link>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="rounded-lg border border-border px-4 py-2 text-sm font-semibold transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:hidden"
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-navigation"
+          onClick={() => setIsMenuOpen((current) => !current)}
+        >
+          {isMenuOpen ? "Close" : "Menu"}
+        </button>
+      </div>
+
+      {isMenuOpen && (
+        <nav
+          id="mobile-navigation"
+          className="border-t border-border px-6 py-4 sm:px-10 lg:hidden"
+          aria-label="Mobile navigation"
+        >
+          <ul className="space-y-2">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={closeMenu}
+                    className={`block rounded-md px-3 py-2 text-sm font-medium ${
+                      isActive
+                        ? "bg-surface-warm text-primary"
+                        : "hover:bg-surface-warm"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          {isAuthenticated ? (
+            <div className="mt-4 grid gap-3 border-t border-border pt-4">
+              <Link
+                href="/customer"
+                onClick={closeMenu}
+                className="rounded-md border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
+              >
+                {customerName ?? "My account"}
+              </Link>
+              <LogoutButton
+                onLoggedOut={closeMenu}
+                className="rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60"
+              />
+            </div>
+          ) : (
+            <div className="mt-4 border-t border-border pt-4">
+              <Link
+                href={siteConfig.authentication.login.href}
+                onClick={closeMenu}
+                className="block rounded-md border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
+              >
+                {siteConfig.authentication.login.label}
+              </Link>
+            </div>
+          )}
+        </nav>
+      )}
+    </header>
+  );
+}

@@ -1,24 +1,19 @@
+import { loginDestination } from "@/lib/auth/roles";
 import { redirect } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
 import { getSessionState } from "@/lib/auth/session";
-
-function safeRedirectPath(value: string | string[] | undefined): string {
-  const candidate = Array.isArray(value) ? value[0] : value;
-  return candidate?.startsWith("/") && !candidate.startsWith("//")
-    ? candidate
-    : "/customer";
-}
 
 export default async function LoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ next?: string | string[] }>;
 }) {
-  const redirectTo = safeRedirectPath((await searchParams).next);
+  const next = (await searchParams).next;
+  const redirectTo = Array.isArray(next) ? next[0] : next;
   const session = await getSessionState();
 
   if (session.status === "authenticated") {
-    redirect(redirectTo);
+    redirect(loginDestination(session.user.role, redirectTo));
   }
 
   return (
@@ -26,7 +21,7 @@ export default async function LoginPage({
       <div className="mx-auto grid w-full max-w-5xl gap-10 md:grid-cols-2 md:items-center lg:gap-16">
         <div className="hidden md:block">
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">
-            Customer portal
+            ROAMIGO portal
           </p>
           <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
             Welcome back.
@@ -49,7 +44,7 @@ export default async function LoginPage({
             <span className="hidden md:inline">Log in to ROAMIGO</span>
           </h1>
           <p className="mt-2 text-base leading-7 text-muted-foreground">
-            Enter your account details to manage your trips.
+            Enter your account details to open your assigned workspace.
           </p>
 
           <LoginForm redirectTo={redirectTo} />

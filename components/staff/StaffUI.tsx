@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import StaffIcon from "./StaffIcon";
 import Card from "@/components/ui/card";
 import Button from "@/components/ui/button";
@@ -12,7 +12,7 @@ export function PageHeading({ title, description, action }: { title: string; des
   return <div className="staff-page-heading"><div><h1>{title}</h1><p>{description}</p></div>{action}</div>;
 }
 export function Badge({ status }: { status: string }) {
-  const tone = ["Confirmed", "For Payment", "Assigned"].includes(status) ? "blue" : ["Available", "Completed", "Best Match"].includes(status) ? "green" : ["Cancelled", "Unavailable", "Rejected"].includes(status) ? "red" : "amber";
+  const tone = ["Confirmed", "For Payment", "Assigned"].includes(status) ? "blue" : ["Available", "Completed", "Best Match", "Paid", "Refunded", "Current"].includes(status) ? "green" : (["Cancelled", "Unavailable", "Rejected"].includes(status) || status.includes("overdue")) ? "red" : "amber";
   return <span className={`staff-badge ${tone}`}>{status}</span>;
 }
 export function Stats({ items }: { items: { label: string; value: string | number; note: string; tone?: string }[] }) {
@@ -20,8 +20,15 @@ export function Stats({ items }: { items: { label: string; value: string | numbe
 }
 export function Modal({ title, children, onClose, wide = false }: { title: string; children: ReactNode; onClose: () => void; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => { const dialog = ref.current; dialog?.showModal(); return () => dialog?.close(); }, []);
-  return <dialog aria-labelledby="staff-dialog-title" ref={ref} className={`staff-dialog ${wide ? "wide" : ""}`} onCancel={e => { e.preventDefault(); onClose(); }} onClick={e => { if (e.target === e.currentTarget) { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) onClose(); } }}><header><h2 id="staff-dialog-title">{title}</h2><button onClick={onClose} aria-label="Close dialog">×</button></header>{children}</dialog>;
+  const titleId = useId();
+  useEffect(() => {
+    const dialog = ref.current;
+    const previousOverflow = document.body.style.overflow;
+    dialog?.showModal();
+    document.body.style.overflow = "hidden";
+    return () => { dialog?.close(); document.body.style.overflow = previousOverflow; };
+  }, []);
+  return <dialog aria-labelledby={titleId} ref={ref} className={`staff-dialog ${wide ? "wide" : ""}`} onCancel={e => { e.preventDefault(); onClose(); }} onClick={e => { if (e.target === e.currentTarget) { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) onClose(); } }}><header><h2 id={titleId}>{title}</h2><button onClick={onClose} aria-label="Close dialog">×</button></header>{children}</dialog>;
 }
 export function Pagination({ page, count, size, onChange }: { page: number; count: number; size: number; onChange: (page: number) => void }) {
   const pages = Math.max(1, Math.ceil(count / size));

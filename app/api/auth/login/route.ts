@@ -1,7 +1,8 @@
+import { loginDestination } from "@/lib/auth/roles";
 import { NextResponse } from "next/server";
 import { backendRequest, BackendRequestError } from "@/lib/api/backend";
 import { setAccessToken } from "@/lib/auth/session";
-import { isRecord, parseLoginResponse } from "@/lib/auth/types";
+import { isRecord, parseLoginResponse, parseSessionUser } from "@/lib/auth/types";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -53,10 +54,18 @@ export async function POST(request: Request) {
       return errorResponse("The login service returned an invalid response.", 502);
     }
 
+    const profile = parseSessionUser(await backendRequest<unknown>("auth/me", {
+      headers: { Authorization: `Bearer ${login.accessToken}` },
+    }));
+    if (!profile || profile.id !== login.user.id) {
+      return errorResponse("Unable to verify your account. Please try again.", 502);
+    }
+    const redirectTo = loginDestination(profile.role, typeof body.next === "string" ? body.next : undefined);
+
     await setAccessToken(login.accessToken, login.expiresIn);
 
     return NextResponse.json(
-      { user: login.user },
+      { user: login.user, redirectTo },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (error) {

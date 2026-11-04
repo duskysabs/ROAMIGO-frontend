@@ -1,2 +1,5 @@
+import { requireStaff } from "@/lib/auth/require-staff";
 import BookingsView from "@/components/staff/BookingsView";
-export default function StaffDashboard() { return <BookingsView dashboard />; }
+export default async function StaffDashboard() {
+  await requireStaff("booking");
+ return <BookingsView dashboard />; }

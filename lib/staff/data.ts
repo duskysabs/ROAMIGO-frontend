@@ -38,6 +38,7 @@ export const staffNavigation = [
   { href: "/staff/fleet", label: "Fleet Availability", icon: "▦" },
   { href: "/staff/customers", label: "Customer Records", icon: "♧" },
   { href: "/staff/reports", label: "Booking Reports", icon: "▧" },
+  { href: "/staff/notifications", label: "Notifications", icon: "♧" },
 ];
 export const money = (value: number) => new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(value);
 export const dateLabel = (value: string) => new Date(`${value}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });

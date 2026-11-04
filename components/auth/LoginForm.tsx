@@ -9,7 +9,7 @@ type LoginError = {
 };
 
 export default function LoginForm({
-  redirectTo = "/customer",
+  redirectTo,
 }: {
   redirectTo?: string;
 }) {
@@ -31,7 +31,7 @@ export default function LoginForm({
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, next: redirectTo }),
       });
 
       if (!response.ok) {
@@ -42,7 +42,8 @@ export default function LoginForm({
         return;
       }
 
-      router.replace(redirectTo);
+      const body = await response.json();
+      router.replace(body.redirectTo ?? "/customer");
       router.refresh();
     } catch {
       setError("Unable to reach the login service. Please try again.");
@@ -68,7 +69,7 @@ export default function LoginForm({
           inputMode="email"
           required
           disabled={isSubmitting}
-          placeholder="customer@example.com"
+          placeholder="you@example.com"
           className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none transition placeholder:text-muted-foreground/75 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
         />
       </div>

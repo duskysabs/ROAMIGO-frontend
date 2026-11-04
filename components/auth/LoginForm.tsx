@@ -6,11 +6,12 @@ import Button from "@/components/ui/button";
 
 type LoginResult = {
   message?: string;
+  redirectTo?: string;
   nextStep?: "APPLICATION" | "COMPLETE_PROFILE" | "CONFIRM_EMAIL";
 };
 
 export default function LoginForm({
-  redirectTo = "/my-bookings",
+  redirectTo,
 }: {
   redirectTo?: string;
 }) {
@@ -32,7 +33,7 @@ export default function LoginForm({
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, next: redirectTo }),
       });
 
       const body = (await response.json().catch(() => null)) as LoginResult | null;
@@ -41,13 +42,14 @@ export default function LoginForm({
         setError(body?.message ?? "Unable to log in. Please try again.");
         return;
       }
-
       if (body?.nextStep === "COMPLETE_PROFILE") {
         router.replace(
-          `/auth/complete-profile?next=${encodeURIComponent(redirectTo)}`,
+          `/auth/complete-profile?next=${encodeURIComponent(
+            redirectTo ?? "/my-bookings",
+          )}`,
         );
       } else {
-        router.replace(redirectTo);
+        router.replace(body?.redirectTo ?? redirectTo ?? "/my-bookings");
       }
       router.refresh();
     } catch {
@@ -74,7 +76,7 @@ export default function LoginForm({
           inputMode="email"
           required
           disabled={isSubmitting}
-          placeholder="customer@example.com"
+          placeholder="you@example.com"
           className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none transition placeholder:text-muted-foreground/75 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
         />
       </div>

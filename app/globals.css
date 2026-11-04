@@ -4,13 +4,13 @@
 :root {
   color-scheme: light;
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #282b26;
   --primary: #b3382c;
   --primary-hover: #96271d;
   --primary-foreground: #ffffff;
-  --surface-warm: #fdf1ea;
-  --muted-foreground: #6b7280;
-  --border: #e5e7eb;
+  --surface-warm: #faf3ec;
+  --muted-foreground: #6e716b;
+  --border: #e7e7df;
   --success: #067647;
   --success-surface: #ecfdf3;
   --success-border: #abefc6;
@@ -46,4 +46,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
+}
+
+::selection {
+  background: #b3382c;
+  color: #ffffff;
 }

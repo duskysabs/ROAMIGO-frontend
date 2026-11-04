@@ -37,7 +37,7 @@ export default function PublicHeader({
   }
 
   return (
-    <header className="border-b border-border bg-background">
+    <header className="relative z-20 border-b border-primary/10 bg-background">
       <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-5 px-6 sm:px-10">
         <Link
           href="/"
@@ -48,12 +48,12 @@ export default function PublicHeader({
           <Image
             src={siteConfig.brand.logoPath}
             alt={siteConfig.brand.companyName}
-            width={64}
-            height={64}
+            width={52}
+            height={52}
             priority
           />
           <span className="hidden sm:block">
-            <span className="block text-sm font-bold tracking-wide text-primary">
+            <span className="block text-base font-extrabold tracking-[0.12em] text-primary">
               {siteConfig.brand.systemName}
             </span>
             <span className="block text-xs text-muted-foreground">
@@ -63,7 +63,7 @@ export default function PublicHeader({
         </Link>
 
         <nav
-          className="hidden items-center gap-6 text-sm font-medium lg:flex"
+          className="hidden items-center gap-5 text-sm font-medium lg:flex"
           aria-label="Main navigation"
         >
           {navigation.map((item) => {
@@ -72,11 +72,12 @@ export default function PublicHeader({
             return (
               <Link
                 key={item.href}
+                aria-current={isActive ? "page" : undefined}
                 href={item.href}
                 className={
                   isActive
-                    ? "border-b-2 border-primary py-2 text-primary"
-                    : "border-b-2 border-transparent py-2 text-foreground/75 transition-colors hover:text-primary"
+                    ? "rounded-full bg-surface-warm px-3 py-2 text-primary"
+                    : "rounded-full px-3 py-2 text-foreground/75 transition-colors hover:bg-surface-warm hover:text-primary"
                 }
               >
                 {item.label}

@@ -1,4 +1,5 @@
 export type TripLocation = {
+  placeId: string;
   locationName: string;
   formattedAddress: string;
   latitude: number;
@@ -24,7 +25,7 @@ export type CustomTripDraft = {
   notes: string;
 };
 
-export type VehicleTypeOption = { id: string; name: string };
+export type VehicleTypeOption = { id: string; name: string; maximumPassengerCapacity: number };
 export type TripStep = "details" | "route" | "review";
 export type TripErrors = Record<string, string>;
 

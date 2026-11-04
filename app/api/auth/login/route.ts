@@ -2,7 +2,11 @@ import { loginDestination } from "@/lib/auth/roles";
 import { NextResponse } from "next/server";
 import { backendRequest, BackendRequestError } from "@/lib/api/backend";
 import { setAccessToken } from "@/lib/auth/session";
-import { isRecord, parseLoginResponse, parseSessionUser } from "@/lib/auth/types";
+import {
+  isRecord,
+  parseAuthenticationResponse,
+  parseSessionUser,
+} from "@/lib/auth/types";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -48,9 +52,9 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    const login = parseLoginResponse(backendResponse);
+    const login = parseAuthenticationResponse(backendResponse);
 
-    if (!login) {
+    if (!login?.accessToken) {
       return errorResponse("The login service returned an invalid response.", 502);
     }
 
@@ -65,7 +69,12 @@ export async function POST(request: Request) {
     await setAccessToken(login.accessToken, login.expiresIn);
 
     return NextResponse.json(
-      { user: login.user, redirectTo },
+      {
+        user: login.user,
+        requiresProfile: login.requiresProfile,
+        nextStep: login.nextStep,
+        redirectTo,
+      },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (error) {

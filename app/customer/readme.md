@@ -1,1 +1,1 @@
-created as of 9/12/26 - incomplete
+Legacy customer entry point. Requests redirect to `/my-bookings`, which is the customer dashboard.

@@ -1,6 +1,8 @@
 import { loginDestination } from "@/lib/auth/roles";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
+import { safeRedirectPath } from "@/lib/auth/redirect";
 import { getSessionState } from "@/lib/auth/session";
 
 export default async function LoginPage({
@@ -9,7 +11,7 @@ export default async function LoginPage({
   searchParams: Promise<{ next?: string | string[] }>;
 }) {
   const next = (await searchParams).next;
-  const redirectTo = Array.isArray(next) ? next[0] : next;
+  const redirectTo = safeRedirectPath(Array.isArray(next) ? next[0] : next);
   const session = await getSessionState();
 
   if (session.status === "authenticated") {
@@ -24,7 +26,7 @@ export default async function LoginPage({
             ROAMIGO portal
           </p>
           <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
-            Welcome back.
+            Welcome Back.
             <span className="block text-primary">
               Let&apos;s get you on the road.
             </span>
@@ -40,14 +42,23 @@ export default async function LoginPage({
             ROAMIGO
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground md:mt-0 md:text-2xl">
-            <span className="md:hidden">Welcome back</span>
-            <span className="hidden md:inline">Log in to ROAMIGO</span>
+            <span className="md:hidden">Welcome Back</span>
+            <span className="hidden md:inline">Log In to ROAMIGO</span>
           </h1>
           <p className="mt-2 text-base leading-7 text-muted-foreground">
             Enter your account details to open your assigned workspace.
           </p>
 
           <LoginForm redirectTo={redirectTo} />
+          <p className="mt-5 text-center text-sm text-muted-foreground">
+            New to ROAMIGO?{" "}
+            <Link
+              href={`/auth/signup?next=${encodeURIComponent(redirectTo)}`}
+              className="font-semibold text-primary hover:underline"
+            >
+              Create an account
+            </Link>
+          </p>
         </div>
       </div>
     </section>

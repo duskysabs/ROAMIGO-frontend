@@ -73,10 +73,10 @@ export default async function MyBookingsPage() {
           <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">
-                Customer portal
+                Customer Portal
               </p>
               <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                My bookings
+                My Bookings
               </h1>
               <p className="mt-3 max-w-2xl leading-7 text-muted-foreground">
                 Review your trip schedule, route, booking status, and payment
@@ -109,7 +109,7 @@ export default async function MyBookingsPage() {
                   </svg>
                 </div>
                 <h2 className="mt-4 text-2xl font-bold tracking-tight">
-                  No bookings yet
+                  No Bookings Yet
                 </h2>
                 <p className="mx-auto mt-2 max-w-md leading-7 text-muted-foreground">
                   Your confirmed trip requests will appear here. Start by
@@ -130,7 +130,7 @@ export default async function MyBookingsPage() {
                       id="upcoming-bookings-heading"
                       className="text-xl font-bold tracking-tight"
                     >
-                      Upcoming and active
+                      Upcoming and Active
                     </h2>
                     <p className="text-sm text-muted-foreground">
                       {upcoming.length} {upcoming.length === 1 ? "trip" : "trips"}
@@ -156,7 +156,7 @@ export default async function MyBookingsPage() {
                         id="past-bookings-heading"
                         className="text-xl font-bold tracking-tight"
                       >
-                        Previous trips
+                        Previous Trips
                       </h2>
                       <p className="text-sm text-muted-foreground">
                         {past.length} {past.length === 1 ? "trip" : "trips"}

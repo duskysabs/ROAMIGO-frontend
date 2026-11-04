@@ -28,7 +28,7 @@ export default async function TourPackageBookPage({
     return (
       <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-10 sm:px-8">
         <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center">
-          <h1 className="text-2xl font-bold text-foreground">Account service unavailable</h1>
+          <h1 className="text-2xl font-bold text-foreground">Account Service Unavailable</h1>
           <p className="mt-2 text-muted-foreground">We could not verify your account. Please try again.</p>
           <Button href={requestPath} variant="outline" className="mt-6">Try again</Button>
         </div>
@@ -56,7 +56,7 @@ export default async function TourPackageBookPage({
     return (
       <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-10 sm:px-8">
         <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-background p-8 text-center">
-          <h1 className="text-2xl font-bold text-foreground">Booking options are unavailable</h1>
+          <h1 className="text-2xl font-bold text-foreground">Booking Options Are Unavailable</h1>
           <p className="mt-2 text-muted-foreground">Please try again after the service is available.</p>
           <Button href={"/tour-packages/" + slug} variant="outline" className="mt-6">Back to Package</Button>
         </div>

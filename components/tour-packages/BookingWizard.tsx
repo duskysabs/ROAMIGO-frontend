@@ -12,6 +12,7 @@ import FormField from "@/components/ui/form-field";
 import Input from "@/components/ui/input";
 import Textarea from "@/components/ui/textarea";
 import { formatCurrency } from "@/lib/bookings/display";
+import { earliestBookingDateValue } from "@/lib/bookings/schedule";
 import {
   createEmptyBookingDraft,
   type BookingDraft,
@@ -193,10 +194,10 @@ export default function BookingWizard({
     return (
       <div className="mx-auto max-w-2xl rounded-3xl border border-primary/20 bg-background p-6 sm:p-8">
         <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">
-          Request received
+          Request Received
         </p>
         <h1 ref={heading} tabIndex={-1} className="mt-2 text-3xl font-bold tracking-tight text-foreground outline-none">
-          Tour request submitted
+          Tour Request Submitted
         </h1>
         <p className="mt-3 text-muted-foreground">
           Submission is not final booking confirmation. Planet J will continue processing the request and its payment status separately.
@@ -320,6 +321,7 @@ export default function BookingWizard({
                 id="travelDate"
                 label="Travel date"
                 value={draft.travelDate}
+                min={earliestBookingDateValue()}
                 invalid={Boolean(errors.travelDate)}
                 describedBy={errors.travelDate ? "travelDate-error" : undefined}
                 onChange={(travelDate) => setDraft({ ...draft, travelDate })}
@@ -334,6 +336,7 @@ export default function BookingWizard({
             </div>
             {errors.travelDate && <p id="travelDate-error" className="mt-2 text-sm text-danger">{errors.travelDate}</p>}
             {errors.preferredStartTime && <p className="mt-2 text-sm text-danger">{errors.preferredStartTime}</p>}
+            <p className="mt-3 text-sm text-muted-foreground">Bookings start from tomorrow and remain subject to availability and confirmation.</p>
             <div className="mt-5 grid gap-5 sm:grid-cols-2">
               <PassengerCounter
                 value={draft.passengerCount ?? 1}

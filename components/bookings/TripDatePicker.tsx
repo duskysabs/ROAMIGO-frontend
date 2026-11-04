@@ -7,6 +7,11 @@ type TripDatePickerProps = {
   label: string;
   value: string;
   min?: string;
+  max?: string;
+  initialMonth?: string;
+  showLabel?: boolean;
+  showYearSelect?: boolean;
+  disabled?: boolean;
   describedBy?: string;
   invalid?: boolean;
   onChange: (value: string) => void;
@@ -42,6 +47,11 @@ export default function TripDatePicker({
   label,
   value,
   min,
+  max,
+  initialMonth,
+  showLabel = true,
+  showYearSelect = false,
+  disabled = false,
   describedBy,
   invalid,
   onChange,
@@ -51,10 +61,16 @@ export default function TripDatePicker({
     return new Date(current.getFullYear(), current.getMonth(), current.getDate());
   }, []);
   const minimumDate = parseDate(min ?? "") ?? today;
+  const maximumDate = parseDate(max ?? "");
   const selectedDate = parseDate(value);
   const [open, setOpen] = useState(false);
-  const [visibleMonth, setVisibleMonth] = useState(() => startOfMonth(selectedDate ?? minimumDate));
+  const [headerMenu, setHeaderMenu] = useState<"month" | "year" | null>(null);
+  const [visibleMonth, setVisibleMonth] = useState(() =>
+    startOfMonth(selectedDate ?? parseDate(initialMonth ?? "") ?? minimumDate),
+  );
   const container = useRef<HTMLDivElement>(null);
+  const yearMenu = useRef<HTMLDivElement>(null);
+  const selectedYearButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function closeOnOutsideClick(event: PointerEvent) {
@@ -73,6 +89,19 @@ export default function TripDatePicker({
     };
   }, []);
 
+  useEffect(() => {
+    if (
+      headerMenu === "year" &&
+      yearMenu.current &&
+      selectedYearButton.current
+    ) {
+      yearMenu.current.scrollTop =
+        selectedYearButton.current.offsetTop -
+        yearMenu.current.clientHeight / 2 +
+        selectedYearButton.current.clientHeight / 2;
+    }
+  }, [headerMenu]);
+
   const firstDayOffset = visibleMonth.getDay();
   const daysInMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0).getDate();
   const calendarDays = Array.from({ length: firstDayOffset + daysInMonth }, (_, index) =>
@@ -80,26 +109,68 @@ export default function TripDatePicker({
   );
   const monthLabel = new Intl.DateTimeFormat(undefined, { month: "long", year: "numeric" }).format(visibleMonth);
   const previousMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
+  const nextMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1);
   const previousDisabled = previousMonth < startOfMonth(minimumDate);
+  const nextDisabled = maximumDate
+    ? nextMonth > startOfMonth(maximumDate)
+    : false;
+  const firstYear = minimumDate.getFullYear();
+  const lastYear = maximumDate?.getFullYear() ?? today.getFullYear() + 10;
+  const availableYears = Array.from(
+    { length: Math.max(0, lastYear - firstYear + 1) },
+    (_, index) => lastYear - index,
+  );
+  const monthNames = Array.from({ length: 12 }, (_, month) =>
+    new Intl.DateTimeFormat(undefined, { month: "short" }).format(
+      new Date(2000, month, 1),
+    ),
+  );
 
   function selectDate(date: Date) {
     onChange(toDateValue(date));
+    setHeaderMenu(null);
     setOpen(false);
+  }
+
+  function selectMonth(month: number) {
+    setVisibleMonth(new Date(visibleMonth.getFullYear(), month, 1));
+    setHeaderMenu(null);
+  }
+
+  function selectYear(year: number) {
+    const earliestMonth = year === firstYear ? minimumDate.getMonth() : 0;
+    const latestMonth =
+      maximumDate && year === maximumDate.getFullYear()
+        ? maximumDate.getMonth()
+        : 11;
+    const month = Math.min(
+      Math.max(visibleMonth.getMonth(), earliestMonth),
+      latestMonth,
+    );
+    setVisibleMonth(new Date(year, month, 1));
+    setHeaderMenu(null);
   }
 
   return (
     <div ref={container} className="relative">
-      <label id={`${id}-label`} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Date</label>
+      {showLabel && (
+        <label id={`${id}-label`} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Date</label>
+      )}
       <button
         id={id}
         type="button"
-        aria-labelledby={`${id}-label ${id}`}
+        aria-labelledby={showLabel ? `${id}-label ${id}` : undefined}
+        aria-label={showLabel ? undefined : label}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-describedby={describedBy}
         aria-invalid={invalid}
-        onClick={() => setOpen((current) => !current)}
-        className="mt-2 flex min-h-12 w-full items-center justify-between rounded-xl border border-border bg-background px-4 text-left text-base outline-none transition-colors hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 sm:text-sm"
+        disabled={disabled}
+        onClick={() => {
+          setHeaderMenu(null);
+          setOpen((current) => !current);
+        }}
+        className={`${showLabel ? "mt-2" : ""} flex min-h-12 w-full items-center justify-between rounded-xl border border-border bg-background px-4 text-left text-base outline-none transition-colors hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm`}
       >
         <span className={value ? "text-foreground" : "text-muted-foreground"}>{formatDate(value)}</span>
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 text-primary" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -112,10 +183,96 @@ export default function TripDatePicker({
             <button type="button" aria-label="Previous month" disabled={previousDisabled}
               onClick={() => setVisibleMonth(previousMonth)}
               className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-foreground hover:bg-surface-warm disabled:cursor-not-allowed disabled:text-border">‹</button>
-            <p className="text-sm font-semibold">{monthLabel}</p>
-            <button type="button" aria-label="Next month"
-              onClick={() => setVisibleMonth(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1))}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-foreground hover:bg-surface-warm">›</button>
+            {showYearSelect ? (
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <button
+                    type="button"
+                    aria-haspopup="menu"
+                    aria-expanded={headerMenu === "month"}
+                    onClick={() =>
+                      setHeaderMenu((current) =>
+                        current === "month" ? null : "month",
+                      )
+                    }
+                    className="min-w-16 rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-semibold hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  >
+                    {monthNames[visibleMonth.getMonth()]}
+                  </button>
+                  {headerMenu === "month" && (
+                    <div
+                      ref={yearMenu}
+                      role="menu"
+                      className="absolute left-1/2 top-11 z-40 grid w-52 -translate-x-1/2 grid-cols-3 gap-1 rounded-xl border border-border bg-background p-2 shadow-xl"
+                    >
+                      {monthNames.map((monthName, month) => {
+                        const disabledMonth =
+                          (visibleMonth.getFullYear() === firstYear &&
+                            month < minimumDate.getMonth()) ||
+                          (maximumDate?.getFullYear() === visibleMonth.getFullYear() &&
+                            month > maximumDate.getMonth());
+                        const selectedMonth = month === visibleMonth.getMonth();
+                        return (
+                          <button
+                            key={monthName}
+                            type="button"
+                            role="menuitem"
+                            disabled={disabledMonth}
+                            onClick={() => selectMonth(month)}
+                            className={`rounded-lg px-2 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:text-border ${selectedMonth ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-surface-warm"}`}
+                          >
+                            {monthName}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+                <div className="relative">
+                  <button
+                    type="button"
+                    aria-haspopup="menu"
+                    aria-expanded={headerMenu === "year"}
+                    onClick={() =>
+                      setHeaderMenu((current) =>
+                        current === "year" ? null : "year",
+                      )
+                    }
+                    className="min-w-20 rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-semibold hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  >
+                    {visibleMonth.getFullYear()}
+                  </button>
+                  {headerMenu === "year" && (
+                    <div
+                      role="menu"
+                      className="absolute left-1/2 top-11 z-40 grid max-h-52 w-52 -translate-x-1/2 grid-cols-3 gap-1 overflow-y-auto rounded-xl border border-border bg-background p-2 shadow-xl"
+                    >
+                      {availableYears.map((year) => (
+                        <button
+                          key={year}
+                          ref={
+                            year === visibleMonth.getFullYear()
+                              ? selectedYearButton
+                              : undefined
+                          }
+                          type="button"
+                          role="menuitem"
+                          onClick={() => selectYear(year)}
+                          className={`rounded-lg px-2 py-2 text-sm font-medium ${year === visibleMonth.getFullYear() ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-surface-warm"}`}
+                        >
+                          {year}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm font-semibold">{monthLabel}</p>
+            )}
+            <button type="button" aria-label="Next month" disabled={nextDisabled}
+              onClick={() => setVisibleMonth(nextMonth)}
+              className="flex h-9 w-9 items-center justify-center rounded-full text-lg text-foreground hover:bg-surface-warm disabled:cursor-not-allowed disabled:text-border">›</button>
           </div>
           <div className="mt-3 grid grid-cols-7 text-center text-xs font-semibold text-muted-foreground">
             {weekDays.map((day) => <span key={day} className="py-2">{day}</span>)}
@@ -126,7 +283,7 @@ export default function TripDatePicker({
               const dateValue = toDateValue(date);
               const isSelected = dateValue === value;
               const isToday = dateValue === toDateValue(today);
-              const isDisabled = date < minimumDate;
+              const isDisabled = date < minimumDate || Boolean(maximumDate && date > maximumDate);
               return (
                 <button key={dateValue} type="button" disabled={isDisabled} onClick={() => selectDate(date)}
                   aria-pressed={isSelected}
@@ -138,7 +295,7 @@ export default function TripDatePicker({
           </div>
           <div className="mt-3 flex justify-between border-t border-border pt-3 text-sm">
             <button type="button" onClick={() => onChange("")} className="font-medium text-muted-foreground hover:text-primary">Clear</button>
-            <button type="button" disabled={today < minimumDate} onClick={() => selectDate(today)} className="font-semibold text-primary hover:text-primary-hover disabled:text-border">Today</button>
+            <button type="button" disabled={today < minimumDate || Boolean(maximumDate && today > maximumDate)} onClick={() => selectDate(today)} className="font-semibold text-primary hover:text-primary-hover disabled:text-border">Today</button>
           </div>
         </div>
       )}

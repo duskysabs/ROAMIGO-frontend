@@ -76,7 +76,7 @@ export default async function BookingDetailPage({
       <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-10 sm:px-8 sm:py-12">
         <div className="mx-auto max-w-5xl">
           <BookingsUnavailable
-            title="We could not load this booking"
+            title="We Could Not Load This Booking"
             description="The booking service may be temporarily unavailable. Your booking information has not been changed."
           />
         </div>
@@ -85,7 +85,8 @@ export default async function BookingDetailPage({
   }
 
   const { booking } = result;
-  const latestPayment = booking.payments.at(0);
+  const latestPaymentState = booking.paymentStates.at(-1);
+  const latestAssignmentState = booking.assignmentStates.at(-1);
 
   return (
     <main className="flex-1 bg-gradient-to-br from-surface-warm via-background to-background px-4 py-10 sm:px-8 sm:py-12">
@@ -118,7 +119,7 @@ export default async function BookingDetailPage({
         <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.75fr)]">
           <div className="space-y-6">
             <section className="rounded-2xl border border-border bg-background p-6 sm:p-7">
-              <h2 className="text-xl font-bold tracking-tight">Trip schedule</h2>
+              <h2 className="text-xl font-bold tracking-tight">Trip Schedule</h2>
               <dl className="mt-5 grid gap-5 sm:grid-cols-2">
                 <div>
                   <dt className="text-sm text-muted-foreground">Departure</dt>
@@ -145,7 +146,7 @@ export default async function BookingDetailPage({
                   />
                   {booking.stops.map((stop, index) => (
                     <li
-                      key={stop.id}
+                      key={`${stop.sequenceNumber}-${stop.locationName}`}
                       className="relative grid grid-cols-[2rem_minmax(0,1fr)] gap-4"
                     >
                       <span
@@ -170,14 +171,6 @@ export default async function BookingDetailPage({
                         <p className="mt-1 break-words text-sm leading-6 text-muted-foreground">
                           {stop.formattedAddress}
                         </p>
-                        {stop.activity && (
-                          <p className="mt-2 text-sm text-foreground">
-                            {stop.activity}
-                            {stop.plannedStopMinutes !== null
-                              ? `, ${stop.plannedStopMinutes} minutes`
-                              : ""}
-                          </p>
-                        )}
                       </div>
                     </li>
                   ))}
@@ -189,14 +182,6 @@ export default async function BookingDetailPage({
               )}
             </section>
 
-            {booking.notes && (
-              <section className="rounded-2xl border border-border bg-background p-6 sm:p-7">
-                <h2 className="text-xl font-bold tracking-tight">Trip notes</h2>
-                <p className="mt-3 whitespace-pre-wrap break-words leading-7 text-muted-foreground">
-                  {booking.notes}
-                </p>
-              </section>
-            )}
           </div>
 
           <aside className="space-y-6">
@@ -242,27 +227,12 @@ export default async function BookingDetailPage({
 
             <section className="rounded-2xl border border-border bg-background p-6">
               <h2 className="text-lg font-bold tracking-tight">Payment</h2>
-              {latestPayment ? (
+              {latestPaymentState ? (
                 <dl className="mt-4 space-y-3 text-sm">
                   <div className="flex justify-between gap-4">
                     <dt className="text-muted-foreground">Status</dt>
                     <dd className="font-semibold">
-                      {humanizeBookingValue(latestPayment.paymentStatus)}
-                    </dd>
-                  </div>
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-muted-foreground">Method</dt>
-                    <dd className="font-semibold">
-                      {humanizeBookingValue(latestPayment.paymentMethod)}
-                    </dd>
-                  </div>
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-muted-foreground">Amount</dt>
-                    <dd className="font-semibold">
-                      {formatCurrency(
-                        latestPayment.amount,
-                        latestPayment.currency,
-                      )}
+                      {humanizeBookingValue(latestPaymentState)}
                     </dd>
                   </div>
                 </dl>
@@ -271,6 +241,24 @@ export default async function BookingDetailPage({
                   No payment has been recorded for this booking.
                 </p>
               )}
+            </section>
+
+            <section className="rounded-2xl border border-border bg-background p-6">
+              <h2 className="text-lg font-bold tracking-tight">Trip Progress</h2>
+              <dl className="mt-4 space-y-3 text-sm">
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Assignment</dt>
+                  <dd className="font-semibold">{latestAssignmentState ? humanizeBookingValue(latestAssignmentState) : "Not assigned"}</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Cancellation</dt>
+                  <dd className="font-semibold">{booking.cancellationState ? humanizeBookingValue(booking.cancellationState) : "None"}</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Refund</dt>
+                  <dd className="font-semibold">{booking.refundStates.length ? humanizeBookingValue(booking.refundStates.at(-1)!) : "None"}</dd>
+                </div>
+              </dl>
             </section>
           </aside>
         </div>

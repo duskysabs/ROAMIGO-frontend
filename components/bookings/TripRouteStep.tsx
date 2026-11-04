@@ -66,6 +66,7 @@ export default function TripRouteStep({ draft, errors, onChange }: {
         <div className="relative grid grid-cols-[2rem_minmax(0,1fr)] gap-4">
           <span aria-hidden="true" className="mt-5 h-8 w-8 bg-background ring-4 ring-background" />
           <Button type="button" variant="outline" className="min-h-11 w-fit px-5 py-2 text-sm"
+            disabled={draft.additionalStops.length >= 8}
             onClick={() => onChange({ ...draft, additionalStops: [...draft.additionalStops, createTripStop(crypto.randomUUID())] })}>
             + Add a stop
           </Button>
@@ -82,7 +83,7 @@ export default function TripRouteStep({ draft, errors, onChange }: {
         </div>
       </div>
 
-      <p className="text-xs text-muted-foreground">Locations will be verified before booking.</p>
+      <p className="text-xs text-muted-foreground">Choose each location from the suggestions. Up to 8 additional stops are supported. Stop activities and requested durations are saved as notes and do not change the estimated driving time.</p>
 
       <TripField id="notes" label="Trip notes (optional)" error={errors.notes}>
         <textarea id="notes" rows={3} maxLength={2000} value={draft.notes} className={tripInputClass}

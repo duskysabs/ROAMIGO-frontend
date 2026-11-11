@@ -1,6 +1,5 @@
 import type { CustomTripDraft, TripErrors, VehicleTypeOption } from "./types";
 import { bookingNotes } from "./integration";
-import { earliestBookingDate } from "./schedule";
 
 export function validateTripDetails(
   draft: CustomTripDraft,
@@ -12,8 +11,8 @@ export function validateTripDetails(
   const end = new Date(draft.endDatetime).getTime();
 
   if (!Number.isFinite(start)) errors.startDatetime = "Choose a departure date and time.";
-  else if (start < earliestBookingDate(now).getTime()) {
-    errors.startDatetime = "Same-day bookings are unavailable. Choose tomorrow or a later date.";
+  else if (start < now) {
+    errors.startDatetime = "Choose a departure time that has not passed.";
   }
   if (!Number.isFinite(end)) errors.endDatetime = "Choose an end date and time.";
   else if (Number.isFinite(start) && end <= start) {

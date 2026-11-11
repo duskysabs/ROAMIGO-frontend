@@ -1,7 +1,6 @@
 export function earliestBookingDate(now = Date.now()): Date {
   const date = new Date(now);
   date.setHours(0, 0, 0, 0);
-  date.setDate(date.getDate() + 1);
   return date;
 }
 

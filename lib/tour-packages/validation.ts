@@ -9,7 +9,45 @@ function parseLocalDate(value: string): number | null {
   const [year, month, day] = value.split("-").map(Number);
   if (!year || !month || !day) return null;
   const date = new Date(year, month - 1, day);
-  return Number.isNaN(date.getTime()) ? null : date.getTime();
+  if (
+    Number.isNaN(date.getTime()) ||
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    return null;
+  }
+  return date.getTime();
+}
+
+function parseLocalDateTime(dateValue: string, timeValue: string): number | null {
+  const [year, month, day] = dateValue.split("-").map(Number);
+  const [hours, minutes] = timeValue.split(":").map(Number);
+  if (
+    !year ||
+    !month ||
+    !day ||
+    !Number.isInteger(hours) ||
+    !Number.isInteger(minutes) ||
+    hours < 0 ||
+    hours > 23 ||
+    minutes < 0 ||
+    minutes > 59
+  ) {
+    return null;
+  }
+  const date = new Date(year, month - 1, day, hours, minutes);
+  if (
+    Number.isNaN(date.getTime()) ||
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day ||
+    date.getHours() !== hours ||
+    date.getMinutes() !== minutes
+  ) {
+    return null;
+  }
+  return date.getTime();
 }
 
 export function validateBookingDetails(
@@ -24,11 +62,21 @@ export function validateBookingDetails(
   if (travelDate === null) {
     errors.travelDate = "Choose a travel date.";
   } else if (travelDate < minimumBookingDate) {
-    errors.travelDate = "Same-day bookings are unavailable. Choose tomorrow or a later date.";
+    errors.travelDate = "Choose today or a later date.";
   }
 
   if (!draft.preferredStartTime) {
     errors.preferredStartTime = "Choose a preferred start time.";
+  } else {
+    const startDatetime = parseLocalDateTime(
+      draft.travelDate,
+      draft.preferredStartTime,
+    );
+    if (startDatetime === null) {
+      errors.preferredStartTime = "Choose a valid start time.";
+    } else if (startDatetime < now) {
+      errors.preferredStartTime = "Choose a start time that has not passed.";
+    }
   }
 
   const selectedVehicle = vehicleTypes.find(

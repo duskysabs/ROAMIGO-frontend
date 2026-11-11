@@ -336,7 +336,7 @@ export default function BookingWizard({
             </div>
             {errors.travelDate && <p id="travelDate-error" className="mt-2 text-sm text-danger">{errors.travelDate}</p>}
             {errors.preferredStartTime && <p className="mt-2 text-sm text-danger">{errors.preferredStartTime}</p>}
-            <p className="mt-3 text-sm text-muted-foreground">Bookings start from tomorrow and remain subject to availability and confirmation.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Bookings can start today and remain subject to availability and confirmation.</p>
             <div className="mt-5 grid gap-5 sm:grid-cols-2">
               <PassengerCounter
                 value={draft.passengerCount ?? 1}

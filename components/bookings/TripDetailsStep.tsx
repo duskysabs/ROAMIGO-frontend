@@ -156,7 +156,7 @@ export default function TripDetailsStep({ draft, errors, vehicleTypes, onChange 
             )}
         </fieldset>
       </div>
-      <p className="text-sm text-muted-foreground">Bookings start from tomorrow and remain subject to availability and confirmation. Times use your device&apos;s local time zone.</p>
+      <p className="text-sm text-muted-foreground">Bookings can start today and remain subject to availability and confirmation. Times use your device&apos;s local time zone.</p>
     </div>
   );
 }

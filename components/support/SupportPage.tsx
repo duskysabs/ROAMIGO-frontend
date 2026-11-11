@@ -16,14 +16,8 @@ export default function SupportPage({ kind }: { kind: SupportPageKind }) {
       <Navbar />
       <main id="main-content" className="flex-1 bg-linear-to-b from-surface-warm/80 via-background to-background px-4 py-8 sm:px-10 sm:py-12">
         <div className="mx-auto max-w-6xl">
-          <nav aria-label="Breadcrumb" className="mb-7 flex items-center gap-2 text-sm text-muted-foreground">
-            <Link href="/" className="rounded hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">Home</Link>
-            <span aria-hidden="true">/</span>
-            <span aria-current="page" className="text-foreground">{kind === "feedback" ? "Feedback" : "Contact us"}</span>
-          </nav>
           <div className="border-b border-primary/10 pb-8">
             <PageHeader {...content} />
-
           </div>
           <div className="mt-9 grid items-start gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-8">
             <Card padding="lg" className="min-w-0 p-5 shadow-sm sm:p-8">

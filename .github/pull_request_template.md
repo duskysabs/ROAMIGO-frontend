@@ -6,6 +6,8 @@
 
 - [ ] Reused existing shared components where applicable
 - [ ] Used semantic colors and established spacing, radius, and typography
+- [ ] Avoided unapproved decorative dots, markers, breadcrumbs, and page-specific pattern variants
+- [ ] Compared the changed UI with applicable sibling pages
 - [ ] Updated `/component-showcase` for shared component changes
 - [ ] Updated `docs/FRONTEND_DESIGN.md` for new conventions
 - [ ] Checked keyboard focus, loading, empty, error, and disabled states

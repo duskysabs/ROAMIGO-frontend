@@ -9,8 +9,7 @@ export default function HeroSection() {
     <section className="px-6 pb-10 pt-10 sm:px-10 sm:pt-14 lg:pb-16 lg:pt-20">
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
         <div className="py-2 lg:py-8">
-          <p className="inline-flex items-center gap-2.5 rounded-full border border-primary/15 bg-white/70 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-primary">
-            <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
+          <p className="inline-flex items-center rounded-full border border-primary/15 bg-white/70 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-primary">
             {home.eyebrow}
           </p>
           <h1 className="mt-7 max-w-xl text-5xl font-semibold leading-[1.08] tracking-[-0.055em] text-foreground sm:text-6xl xl:text-7xl">

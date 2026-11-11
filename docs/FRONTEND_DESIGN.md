@@ -19,6 +19,18 @@ This guide defines the shared visual and interaction rules for customer-facing R
 - Use one primary action per section. Secondary actions should use the outline or quiet button variant.
 - Preserve visible focus styles, labels, error messages, disabled states, and touch targets.
 
+## Visual consistency guardrails
+
+- Treat matching eyebrow text, badges, pills, headings, navigation, cards, and buttons as the same visual pattern across pages.
+- Do not add decorative leading dots, bullets, circles, blobs, or status-like markers to eyebrow text, badges, pills, headings, or navigation labels.
+- Use bullets and dots only when they communicate semantic list structure, status, progress, or selection.
+- Do not add breadcrumbs to single-level customer pages. The primary navigation and active page heading already provide sufficient location context.
+- Introduce breadcrumbs only as an approved site-wide navigation pattern applied consistently to every applicable page.
+- Do not introduce a page-specific visual variant when an existing shared component or sibling-page pattern already covers the need.
+- Compare sibling customer pages before changing headers, spacing, navigation, buttons, cards, or section labels.
+- Feedback and Contact Us share `components/support/SupportPage.tsx`. Keep their layout and visual patterns aligned through that shared component.
+- Decorative elements must communicate information or improve usability. Do not add ornament solely to make a page look more designed.
+
 ## Responsive expectations
 
 - Design mobile-first and check the smallest supported viewport before requesting review.
@@ -49,6 +61,7 @@ When adding or materially changing a shared component:
 
 - Explain which shared components were reused or extended.
 - Include desktop and mobile screenshots for visible changes.
+- Confirm that the change does not introduce unapproved decorative markers, breadcrumbs, or page-specific pattern variants.
 - Call out intentional deviations from this guide.
 - Run the repository lint and build commands before merge.
 - Avoid mixing a broad redesign with unrelated feature work.

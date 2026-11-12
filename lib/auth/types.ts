@@ -1,7 +1,12 @@
+import {
+  parseApplicationRole,
+  type ApplicationRole,
+} from "@/lib/auth/roles";
+
 export type SessionUser = {
   id: string;
   email: string | null;
-  role: string | null;
+  role: ApplicationRole | null;
   displayName: string | null;
 };
 
@@ -92,7 +97,7 @@ export function parseSessionUser(value: unknown): SessionUser | null {
   return {
     id,
     email: optionalString(value.user.email),
-    role: optionalString(profile?.role),
+    role: parseApplicationRole(profile?.role),
     displayName,
   };
 }

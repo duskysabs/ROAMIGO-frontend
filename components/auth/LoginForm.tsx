@@ -2,7 +2,7 @@
 
 import { type FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/ui/button";
+import { Alert, Button, FormField, Input } from "@/components/ui";
 
 type LoginResult = {
   message?: string;
@@ -61,25 +61,19 @@ export default function LoginForm({
 
   return (
     <form className="mt-6 space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
-      <div>
-        <label
-          htmlFor="email"
-          className="text-sm font-semibold text-foreground"
-        >
-          Email address
-        </label>
-        <input
+      <FormField htmlFor="email" label="Email address">
+        <Input
           id="email"
           name="email"
           type="email"
           autoComplete="email"
           inputMode="email"
           required
+          maxLength={254}
           disabled={isSubmitting}
           placeholder="you@example.com"
-          className="mt-2 min-h-12 w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none transition placeholder:text-muted-foreground/75 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
         />
-      </div>
+      </FormField>
 
       <div>
         <label
@@ -89,7 +83,7 @@ export default function LoginForm({
           Password
         </label>
         <div className="relative mt-2">
-          <input
+          <Input
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
@@ -97,7 +91,7 @@ export default function LoginForm({
             required
             maxLength={1024}
             disabled={isSubmitting}
-            className="min-h-12 w-full rounded-xl border border-border bg-background py-3 pl-4 pr-20 text-base outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-surface-warm disabled:opacity-70 sm:text-sm"
+            className="pr-20"
           />
           <button
             type="button"
@@ -112,15 +106,7 @@ export default function LoginForm({
         </div>
       </div>
 
-      {error && (
-        <div
-          role="alert"
-          aria-live="polite"
-          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"
-        >
-          {error}
-        </div>
-      )}
+      {error && <Alert variant="danger">{error}</Alert>}
 
       <Button
         type="submit"

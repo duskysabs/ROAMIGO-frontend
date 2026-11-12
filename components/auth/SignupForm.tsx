@@ -19,6 +19,8 @@ export default function SignupForm({
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
   const [confirmationEmail, setConfirmationEmail] = useState<string | null>(
     null,
   );
@@ -120,7 +122,7 @@ export default function SignupForm({
           required
           maxLength={254}
           disabled={isSubmitting}
-          placeholder="customer@example.com"
+          placeholder="you@example.com"
         />
       </FormField>
 
@@ -146,7 +148,7 @@ export default function SignupForm({
           />
           <button
             type="button"
-            aria-controls="signup-password signup-password-confirmation"
+            aria-controls="signup-password"
             aria-pressed={showPassword}
             disabled={isSubmitting}
             onClick={() => setShowPassword((visible) => !visible)}
@@ -170,17 +172,31 @@ export default function SignupForm({
         >
           Confirm password
         </label>
-        <Input
-          id="signup-password-confirmation"
-          name="passwordConfirmation"
-          type={showPassword ? "text" : "password"}
-          autoComplete="new-password"
-          required
-          minLength={8}
-          maxLength={128}
-          disabled={isSubmitting}
-          className="mt-2"
-        />
+        <div className="relative mt-2">
+          <Input
+            id="signup-password-confirmation"
+            name="passwordConfirmation"
+            type={showPasswordConfirmation ? "text" : "password"}
+            autoComplete="new-password"
+            required
+            minLength={8}
+            maxLength={128}
+            disabled={isSubmitting}
+            className="pr-20"
+          />
+          <button
+            type="button"
+            aria-controls="signup-password-confirmation"
+            aria-pressed={showPasswordConfirmation}
+            disabled={isSubmitting}
+            onClick={() =>
+              setShowPasswordConfirmation((visible) => !visible)
+            }
+            className="absolute inset-y-0 right-0 flex min-w-16 items-center justify-center rounded-r-xl px-3 text-sm font-semibold text-primary hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-primary disabled:opacity-60"
+          >
+            {showPasswordConfirmation ? "Hide" : "Show"}
+          </button>
+        </div>
       </div>
 
       {error && <Alert variant="danger">{error}</Alert>}

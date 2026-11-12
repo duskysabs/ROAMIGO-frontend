@@ -1,4 +1,8 @@
-import { loginDestination } from "@/lib/auth/roles";
+import {
+  isStaffRole,
+  isStaffWorkspacePath,
+  loginDestination,
+} from "@/lib/auth/roles";
 import { NextResponse } from "next/server";
 import { backendRequest, BackendRequestError } from "@/lib/api/backend";
 import { setAccessToken } from "@/lib/auth/session";
@@ -64,7 +68,20 @@ export async function POST(request: Request) {
     if (!profile || profile.id !== login.user.id) {
       return errorResponse("Unable to verify your account. Please try again.", 502);
     }
-    const redirectTo = loginDestination(profile.role, typeof body.next === "string" ? body.next : undefined);
+    const requestedDestination =
+      typeof body.next === "string" ? body.next : undefined;
+
+    if (
+      isStaffWorkspacePath(requestedDestination) &&
+      !isStaffRole(profile.role)
+    ) {
+      return errorResponse(
+        "This account does not have access to the staff workspace.",
+        403,
+      );
+    }
+
+    const redirectTo = loginDestination(profile.role, requestedDestination);
 
     await setAccessToken(login.accessToken, login.expiresIn);
 

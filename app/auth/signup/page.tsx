@@ -41,7 +41,7 @@ export default async function SignupPage({
             Create Your Account
           </h1>
           <p className="mt-2 text-base leading-7 text-muted-foreground">
-            Enter your login details to get started.
+            Enter your account details to get started.
           </p>
 
           <SignupForm redirectTo={redirectTo} />

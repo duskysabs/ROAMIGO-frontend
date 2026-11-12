@@ -7,16 +7,18 @@ import { useState } from "react";
 import LogoutButton from "@/components/auth/LogoutButton";
 import { siteConfig } from "@/config/site";
 
-type PublicHeaderProps = {
+export type PublicHeaderProps = {
   isAuthenticated?: boolean;
   customerName?: string;
   customerEmail?: string;
+  staffLoginContext?: boolean;
 };
 
 export default function PublicHeader({
   isAuthenticated = false,
   customerName,
   customerEmail,
+  staffLoginContext = false,
 }: PublicHeaderProps) {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -107,18 +109,29 @@ export default function PublicHeader({
             </>
           ) : (
             <>
-              <Link
-                href={siteConfig.authentication.signup.href}
-                className="inline-flex min-h-10 items-center rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-              >
-                {siteConfig.authentication.signup.label}
-              </Link>
-              <Link
-                href={siteConfig.authentication.login.href}
-                className="inline-flex min-h-10 items-center rounded-lg px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-              >
-                {siteConfig.authentication.login.label}
-              </Link>
+              {staffLoginContext ? (
+                <Link
+                  href="/"
+                  className="inline-flex min-h-10 items-center rounded-lg px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                >
+                  Customer site
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href={siteConfig.authentication.signup.href}
+                    className="inline-flex min-h-10 items-center rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  >
+                    {siteConfig.authentication.signup.label}
+                  </Link>
+                  <Link
+                    href={siteConfig.authentication.login.href}
+                    className="inline-flex min-h-10 items-center rounded-lg px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-surface-warm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  >
+                    {siteConfig.authentication.login.label}
+                  </Link>
+                </>
+              )}
             </>
           )}
         </div>
@@ -178,20 +191,32 @@ export default function PublicHeader({
             </div>
           ) : (
             <div className="mt-4 grid gap-3 border-t border-border pt-4">
-              <Link
-                href={siteConfig.authentication.signup.href}
-                onClick={closeMenu}
-                className="block rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground"
-              >
-                {siteConfig.authentication.signup.label}
-              </Link>
-              <Link
-                href={siteConfig.authentication.login.href}
-                onClick={closeMenu}
-                className="block rounded-md border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
-              >
-                {siteConfig.authentication.login.label}
-              </Link>
+              {staffLoginContext ? (
+                <Link
+                  href="/"
+                  onClick={closeMenu}
+                  className="block rounded-md border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
+                >
+                  Customer site
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href={siteConfig.authentication.signup.href}
+                    onClick={closeMenu}
+                    className="block rounded-md bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground"
+                  >
+                    {siteConfig.authentication.signup.label}
+                  </Link>
+                  <Link
+                    href={siteConfig.authentication.login.href}
+                    onClick={closeMenu}
+                    className="block rounded-md border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
+                  >
+                    {siteConfig.authentication.login.label}
+                  </Link>
+                </>
+              )}
             </div>
           )}
         </nav>

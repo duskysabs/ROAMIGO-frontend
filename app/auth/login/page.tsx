@@ -50,10 +50,10 @@ export default async function LoginPage({
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground md:mt-0 md:text-2xl">
             <span className="md:hidden">
-              {isStaffLogin ? "Staff sign in" : "Welcome Back"}
+              {isStaffLogin ? "Staff Sign In" : "Welcome Back"}
             </span>
             <span className="hidden md:inline">
-              {isStaffLogin ? "Staff sign in" : "Log In to ROAMIGO"}
+              {isStaffLogin ? "Staff Sign In" : "Log In to ROAMIGO"}
             </span>
           </h1>
           <p className="mt-2 text-base leading-7 text-muted-foreground">

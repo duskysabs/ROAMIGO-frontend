@@ -1,4 +1,5 @@
 import {
+  isAdminWorkspacePath,
   isStaffWorkspacePath,
   loginDestination,
 } from "@/lib/auth/roles";
@@ -15,7 +16,8 @@ export default async function LoginPage({
 }) {
   const next = (await searchParams).next;
   const redirectTo = safeRedirectPath(Array.isArray(next) ? next[0] : next);
-  const isStaffLogin = isStaffWorkspacePath(redirectTo);
+  const isAdminLogin = isAdminWorkspacePath(redirectTo);
+  const isStaffLogin = isStaffWorkspacePath(redirectTo) || isAdminLogin;
   const session = await getSessionState();
 
   if (session.status === "authenticated") {
@@ -27,7 +29,7 @@ export default async function LoginPage({
       <div className="mx-auto grid w-full max-w-5xl gap-10 md:grid-cols-2 md:items-center lg:gap-16">
         <div className="hidden md:block">
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">
-            {isStaffLogin ? "Staff portal" : "Customer portal"}
+            {isAdminLogin ? "Admin portal" : isStaffLogin ? "Staff portal" : "Customer portal"}
           </p>
           <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
             {isStaffLogin ? "Welcome to operations." : "Welcome Back."}
@@ -46,18 +48,20 @@ export default async function LoginPage({
 
         <div className="mx-auto w-full max-w-md bg-transparent py-2 sm:rounded-3xl sm:border sm:border-primary/15 sm:bg-background sm:p-7 lg:p-8">
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary md:hidden">
-            {isStaffLogin ? "Staff portal" : "ROAMIGO"}
+            {isAdminLogin ? "Admin portal" : isStaffLogin ? "Staff portal" : "ROAMIGO"}
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground md:mt-0 md:text-2xl">
             <span className="md:hidden">
-              {isStaffLogin ? "Staff Sign In" : "Welcome Back"}
+              {isAdminLogin ? "Admin Sign In" : isStaffLogin ? "Staff Sign In" : "Welcome Back"}
             </span>
             <span className="hidden md:inline">
-              {isStaffLogin ? "Staff Sign In" : "Log In to ROAMIGO"}
+              {isAdminLogin ? "Admin Sign In" : isStaffLogin ? "Staff Sign In" : "Log In to ROAMIGO"}
             </span>
           </h1>
           <p className="mt-2 text-base leading-7 text-muted-foreground">
-            {isStaffLogin
+            {isAdminLogin
+              ? "Use your assigned Planet J administrator account to open administration."
+              : isStaffLogin
               ? "Use your assigned Planet J staff account to open the operations workspace."
               : "Enter your account details to open your assigned workspace."}
           </p>

@@ -49,13 +49,16 @@ export default function TripTimePicker({ id, label, value, describedBy, invalid,
     <div ref={container} className="relative">
       <label id={`${id}-label`} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Time</label>
       <button id={id} type="button" aria-labelledby={`${id}-label ${id}`} aria-haspopup="listbox" aria-expanded={open}
-        aria-describedby={describedBy} aria-invalid={invalid} onClick={() => setOpen((current) => !current)}
+        aria-describedby={[describedBy, invalid ? `${id}-invalid` : undefined].filter(Boolean).join(" ") || undefined} onClick={() => setOpen((current) => !current)}
         className="mt-2 flex min-h-12 w-full items-center justify-between rounded-xl border border-border bg-background px-4 text-left text-base outline-none transition-colors hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 sm:text-sm">
         <span className={value ? "text-foreground" : "text-muted-foreground"}>{formatTime(value)}</span>
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 text-primary" fill="none" stroke="currentColor" strokeWidth="1.8">
           <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
         </svg>
       </button>
+      {invalid && (
+        <span id={`${id}-invalid`} className="sr-only">Invalid time selection.</span>
+      )}
       {open && (
         <div className="absolute left-0 right-0 z-30 mt-2 overflow-hidden rounded-xl border border-border bg-background shadow-xl">
           <div role="listbox" aria-label={`${label} time`} className="max-h-64 overflow-y-auto p-2">

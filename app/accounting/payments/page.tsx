@@ -1,6 +1,6 @@
 import { requireStaff } from "@/lib/auth/require-staff";
-import { PaymentsView } from "@/components/accounting/AccountingViews";
+import AccountingOperations from "@/components/accounting/AccountingOperations";
 export default async function Page() {
   await requireStaff("accounting");
-  return <PaymentsView />;
+  return <AccountingOperations resource="payments" />;
 }

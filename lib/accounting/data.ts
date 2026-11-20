@@ -1,5 +1,5 @@
 export const accountingNavigation = [
-  ["", "Dashboard", 6], ["payments", "Payments", 7],
+  ["", "Dashboard", 6], ["payments", "Payments", 7], ["assignments", "Assignments", 8],
   ["receivables", "Accounts Receivable", 8], ["refunds", "Refunds", 9],
   ["customers", "Customer Accounts", 10], ["reports", "Accounting Reports", 11],
   ["notifications", "Notifications", 12],

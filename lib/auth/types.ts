@@ -97,7 +97,10 @@ export function parseSessionUser(value: unknown): SessionUser | null {
   return {
     id,
     email: optionalString(value.user.email),
-    role: parseApplicationRole(profile?.role),
+    // Driver linkage overrides legacy STAFF roles, matching backend authorization.
+    role: value.user.isDriver === true
+      ? "DRIVER"
+      : parseApplicationRole(profile?.role),
     displayName,
   };
 }

@@ -25,6 +25,7 @@ function Shell({ children, user }: { children: ReactNode; user: SessionUser }) {
         <span><strong>ROAMIGO</strong><small>Staff Portal</small></span>
       </Link>
       <div className="staff-role"><small>Workspace</small><strong>Booking</strong><small>Booking operations access</small></div>
+      {user.role === "ADMIN" && <Link href="/admin" className="staff-workspace-switch">Open Administration</Link>}
       <Link href="/accounting" className="staff-workspace-switch">Open Accounting →</Link><p className="staff-nav-label">Booking operations</p><nav aria-label="Staff navigation">{staffNavigation.map(item => <Link key={item.href} href={item.href} aria-current={(item.href === "/staff" ? pathname === item.href : pathname.startsWith(item.href)) ? "page" : undefined} onClick={() => { setMenuOpen(false); setQuery(""); }}><StaffIcon name={item.href.split("/")[2] ?? "dashboard"} />{item.label}</Link>)}</nav>
       <div className="staff-sidebar-foot"><Link href="/staff/help"><Image src="/images/staff/dashboard-imgSvg.svg" width={17} height={17} alt="" />Help & User Guide</Link><div className="staff-signout"><Image src="/images/staff/dashboard-imgSvg1.svg" width={17} height={17} alt="" /><LogoutButton /></div></div>
     </aside>

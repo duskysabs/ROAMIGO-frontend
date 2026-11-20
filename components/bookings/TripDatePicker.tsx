@@ -163,8 +163,7 @@ export default function TripDatePicker({
         aria-label={showLabel ? undefined : label}
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-describedby={describedBy}
-        aria-invalid={invalid}
+        aria-describedby={[describedBy, invalid ? `${id}-invalid` : undefined].filter(Boolean).join(" ") || undefined}
         disabled={disabled}
         onClick={() => {
           setHeaderMenu(null);
@@ -177,6 +176,9 @@ export default function TripDatePicker({
           <path d="M7 3v3m10-3v3M4.5 9.5h15M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
         </svg>
       </button>
+      {invalid && (
+        <span id={`${id}-invalid`} className="sr-only">Invalid date selection.</span>
+      )}
       {open && (
         <div role="dialog" aria-label={`${label} calendar`} className="absolute left-0 z-30 mt-2 w-[19rem] rounded-xl border border-border bg-background p-4 shadow-xl">
           <div className="flex items-center justify-between">

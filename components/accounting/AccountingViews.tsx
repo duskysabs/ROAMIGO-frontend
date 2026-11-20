@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Children, cloneElement, isValidElement, useState, type ReactElement, type ReactNode, type FormEvent } from "react";
+import { Children, cloneElement, isValidElement, useState, type ReactElement, type ReactNode } from "react";
 import Button from "@/components/ui/button";
 import { Badge, Empty, Modal, PageHeading, Panel } from "@/components/staff/StaffUI";
 import { csvCell, money } from "@/lib/staff/data";
@@ -38,35 +38,8 @@ export function AccountingDashboard() {
     <Metric label="Outstanding balance" value={money(receivables.reduce((sum, r) => sum + r.approved - r.paid, 0))} note={`Across ${receivablesSummary.count} bookings`} icon={1} />
     <Metric label="Refund requests" value={refunds.filter(r => r.status === "Requested").length} note="Available for review" icon={2} />
     <Metric label="Overdue accounts" value={receivablesSummary.overdueCount} note={money(receivablesSummary.overdue)} icon={3} />
-  </div><div className="accounting-columns"><Panel title="Recent payment activity" subtitle="Latest recorded transactions" action={<Link className="staff-text-link" href="/accounting/payments">View all <AccountingIcon index={4} size={14} /></Link>}><PaymentRows payments={payments.slice(0, 4)} /></Panel>
+  </div><div className="accounting-columns"><Panel title="Recent payment activity" subtitle="Latest recorded transactions" action={<Link className="staff-text-link" href="/accounting/payments">Pending reviews <AccountingIcon index={4} size={14} /></Link>}><PaymentRows payments={payments.slice(0, 4)} /></Panel>
     <Panel title="Receivables requiring follow-up" subtitle={`Aging as of ${receivablesReference.dateLabel}`} action={<Link className="staff-text-link" href="/accounting/receivables">Open ledger <AccountingIcon index={4} size={14} /></Link>}>{receivables.map(r => <Link className="accounting-receivable" href="/accounting/receivables" key={r.booking}><div><strong>{r.customer}</strong><small>{r.booking}</small></div><div><strong>{money(r.approved - r.paid)}</strong><Badge status={r.aging} /></div></Link>)}</Panel></div></>;
-}
-
-export function PaymentsView() {
-  const { payments, setPayments } = useAccounting();
-  const [query, setQuery] = useState("");
-  const [tab, setTab] = useState("Transactions");
-  const [status, setStatus] = useState("All statuses");
-  const [selected, setSelected] = useState<Payment | null>(null);
-  const [manual, setManual] = useState(false);
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const shown = payments.filter(p => `${p.id} ${p.customer} ${p.booking}`.toLowerCase().includes(query.toLowerCase()) && (status === "All statuses" || p.status === status) && (tab !== "For verification" || p.status === "Needs Review") && (tab !== "Manual payments" || ["Cash", "Bank Deposit"].includes(p.channel)));
-  function recordManual(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault(); const data = new FormData(e.currentTarget);
-    const amount = Number(data.get("amount"));
-    const booking = String(data.get("booking") ?? "").trim();
-    const customer = String(data.get("customer") ?? "").trim();
-    const notes = String(data.get("notes") ?? "").trim();
-    if (!Number.isFinite(amount) || amount <= 0 || !booking || !customer || !notes) { setError("Enter a booking, customer, positive amount, and collection reference."); return; }
-    setPayments(items => [{ id: `PAY-${crypto.randomUUID().slice(0, 8)}`, booking, customer, amount: Math.round(amount * 100) / 100, channel: String(data.get("channel")), received: String(data.get("received")), status: "Needs Review", notes }, ...items]);
-    setManual(false); setMessage("Payment recorded for review.");
-  }
-  return <><PageHeading title="Payments" description="Verify online payments, record manual collections, and monitor balances." action={<Button className="staff-button" size="sm" onClick={() => { setManual(true); setError(""); }}>+ Record manual payment</Button>} />
-    <Panel><div className="accounting-tabs">{["Transactions", "For verification", "Manual payments"].map(t => <button key={t} aria-pressed={t === tab} onClick={() => setTab(t)}>{t}</button>)}<Link href="/accounting/receivables">Accounts receivable</Link><Link href="/accounting/refunds">Refunds</Link></div><Search value={query} onChange={setQuery}><select aria-label="Payment status" value={status} onChange={e => setStatus(e.target.value)}>{["All statuses", "Paid", "Needs Review", "Rejected"].map(s => <option key={s}>{s}</option>)}</select></Search></Panel>
-    <Panel><PaymentRows payments={shown} onView={p => { setSelected(p); setError(""); }} />{!shown.length ? <Empty /> : null}</Panel><p role="status">{message}</p>
-    {selected ? <Details title="Payment details" record={{ Reference: selected.id, Booking: selected.booking, Customer: selected.customer, Channel: selected.channel, Amount: money(selected.amount), Status: selected.status, Notes: selected.notes }} onClose={() => setSelected(null)}>{selected.status === "Needs Review" ? <form onSubmit={e => { e.preventDefault(); const data = new FormData(e.currentTarget); const reason = String(data.get("reason") ?? "").trim(); if (!reason) { setError("Enter verification notes."); return; } const decision = String(data.get("decision")); setPayments(items => items.map(p => p.id === selected.id && p.status === "Needs Review" ? { ...p, status: decision, notes: reason } : p)); setSelected(null); setMessage(`Payment marked as ${decision.toLowerCase()}.`); }}><label>Decision<select name="decision"><option value="Paid">Verify payment</option><option value="Rejected">Reject payment</option></select></label><label>Verification notes<textarea name="reason" required maxLength={2000} /></label>{error ? <p role="alert">{error}</p> : null}<Button type="submit" className="staff-button">Confirm decision</Button></form> : null}</Details> : null}
-    {manual ? <Modal title="Record manual payment" onClose={() => setManual(false)}><form className="staff-form-pad accounting-manual-form" onSubmit={recordManual}><label>Booking reference<input name="booking" required maxLength={100} /></label><label>Customer<input name="customer" required maxLength={150} /></label><label>Amount (PHP)<input name="amount" type="number" required min="0.01" step="0.01" /></label><label>Method<select name="channel"><option>Cash</option><option>Bank Deposit</option></select></label><label>Received date<input name="received" type="date" required /></label><label>Collection reference / notes<textarea name="notes" required maxLength={2000} /></label>{error ? <p role="alert">{error}</p> : null}<div className="staff-modal-actions"><Button type="button" variant="outline" className="staff-button" onClick={() => setManual(false)}>Cancel</Button><Button type="submit" className="staff-button">Record payment</Button></div></form></Modal> : null}</>;
 }
 
 export function ReceivablesView() {

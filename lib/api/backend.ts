@@ -67,7 +67,7 @@ export async function backendRequest<T>(
     response = await fetch(requestUrl, {
       ...init,
       cache: "no-store",
-      signal: AbortSignal.timeout(getRequestTimeoutMs()),
+      signal: init.signal ?? AbortSignal.timeout(getRequestTimeoutMs()),
     });
   } catch {
     throw new BackendRequestError(

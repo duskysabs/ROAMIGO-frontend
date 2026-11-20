@@ -1,4 +1,5 @@
 import {
+  isAdminWorkspacePath,
   isStaffRole,
   isStaffWorkspacePath,
   loginDestination,
@@ -62,6 +63,19 @@ export async function POST(request: Request) {
       return errorResponse("The login service returned an invalid response.", 502);
     }
 
+    // Profile completion uses token-only authentication on the backend.
+    if (login.requiresProfile && login.nextStep === "COMPLETE_PROFILE") {
+      await setAccessToken(login.accessToken, login.expiresIn);
+      return NextResponse.json(
+        {
+          user: login.user,
+          requiresProfile: true,
+          nextStep: login.nextStep,
+        },
+        { headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
     const profile = parseSessionUser(await backendRequest<unknown>("auth/me", {
       headers: { Authorization: `Bearer ${login.accessToken}` },
     }));
@@ -79,6 +93,10 @@ export async function POST(request: Request) {
         "This account does not have access to the staff workspace.",
         403,
       );
+    }
+
+    if (isAdminWorkspacePath(requestedDestination) && profile.role !== "ADMIN") {
+      return errorResponse("This account does not have administrator access.", 403);
     }
 
     const redirectTo = loginDestination(profile.role, requestedDestination);

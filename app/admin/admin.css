@@ -1,0 +1,7 @@
+.admin-portal .admin-card { border-radius: 9px; box-shadow: none; padding: 16px; }
+.admin-portal .admin-card > form { font-size: 12px; }
+.admin-portal .staff-content > .staff-page-heading { margin-bottom: 20px; }
+.admin-portal .staff-content button:not(.staff-dialog button) { font-size: 12px; }
+.admin-portal .staff-table tbody th { background: white; color: var(--foreground); }
+.admin-portal .admin-card label:has(input[type="checkbox"]) { flex-direction: row; }
+.admin-portal input[type="checkbox"] { width: 20px; min-height: 20px; flex-shrink: 0; padding: 0; }

@@ -23,7 +23,7 @@ test("only known sections and relative backend paths are configured", () => {
   }
 });
 let counter = 0;
-async function harness(session, body, origin = "https://roamigo.example") {
+async function harness(session, body, origin = "https://roamigo.example", resource = "staff") {
   const mockUrl = url([
     "export const state = { calls: [] };",
     "export class BackendRequestError extends Error { constructor(message,status,body){super(message);this.status=status;this.body=body;} }",
@@ -42,7 +42,7 @@ async function harness(session, body, origin = "https://roamigo.example") {
     method: body ? "POST" : "GET", headers: { Origin: origin, "Content-Type": "application/json" },
     ...(body ? { body: JSON.stringify(body) } : {}),
   });
-  const response = await route[body ? "POST" : "GET"](request, { params: Promise.resolve({ resource: "staff" }) });
+  const response = await route[body ? "POST" : "GET"](request, { params: Promise.resolve({ resource }) });
   return { response, calls: mock.state.calls };
 }
 test("non-Admin reads and mutations never reach the backend", async () => {
@@ -75,4 +75,22 @@ test("valid Admin read forwards the server token to the known endpoint", async (
   assert.equal(result.response.status, 200);
   assert.equal(result.calls[0][0], "admin/staff?limit=20&page=1");
   assert.equal(result.calls[0][1].headers.Authorization, "Bearer synthetic-token");
+});
+
+test("pricing switches require explicit confirmation and a bounded unique set of UUIDs", async () => {
+  const session = { status: "authenticated", user: { role: "ADMIN" } };
+  const id = "11111111-1111-4111-8111-111111111111";
+  const previous = "22222222-2222-4222-8222-222222222222";
+  for (const values of [{}, { expectedActiveIds: "all" }, { expectedActiveIds: ["invalid"] }, { expectedActiveIds: [previous, previous] }, { expectedActiveIds: [], role: "ADMIN" }]) {
+    const result = await harness(session, { operation: "switch", id, values, confirmed: true }, undefined, "pricing");
+    assert.equal(result.response.status, 400);
+    assert.equal(result.calls.length, 0);
+  }
+  const denied = await harness(session, { operation: "switch", id, values: { expectedActiveIds: [] } }, undefined, "pricing");
+  assert.equal(denied.response.status, 400);
+  assert.equal(denied.calls.length, 0);
+  const valid = await harness(session, { operation: "switch", id, values: { expectedActiveIds: [previous] }, confirmed: true }, undefined, "pricing");
+  assert.equal(valid.response.status, 201);
+  assert.equal(valid.calls[0][0], `admin/pricing-configurations/${id}/switch`);
+  assert.deepEqual(JSON.parse(valid.calls[0][1].body), { expectedActiveIds: [previous] });
 });

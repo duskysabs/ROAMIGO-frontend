@@ -49,12 +49,14 @@ export async function POST(request: Request, { params }: { params: Promise<{ res
     const action = adminResources[resource].actions.find(item => item.id === command.operation);
     if (!action || (action.record && (typeof body.id !== "string" || !uuid.test(body.id)))) return json({ message: "Invalid operation or record ID." }, 400);
     if (action.confirmation && body.confirmed !== true) return json({ message: "Confirm this change before submitting." }, 400);
-    const allowed = new Set([...action.fields.map(field => field.name), ...(action.stops ? ["stops"] : [])]);
+    const pricingSwitch = resource === "pricing" && action.id === "switch";
+    if (pricingSwitch && (!Array.isArray(values.expectedActiveIds) || values.expectedActiveIds.length > 100 || values.expectedActiveIds.some(id => typeof id !== "string" || !uuid.test(id)) || new Set(values.expectedActiveIds).size !== values.expectedActiveIds.length)) return json({ message: "Refresh pricing and review the configurations being replaced." }, 400);
+    const allowed = new Set([...action.fields.map(field => field.name), ...(action.stops ? ["stops"] : []), ...(pricingSwitch ? ["expectedActiveIds"] : [])]);
     if (Object.keys(values).some(key => !allowed.has(key))) return json({ message: "Unexpected form field." }, 400);
     if (action.stops && (!Array.isArray(values.stops) || values.stops.length < 2 || values.stops.length > 30 || values.stops.some(stop => !isRecord(stop) || Object.keys(stop).some(key => ![...stopFields.map(field => field.name), "stopType"].includes(key))))) return json({ message: "Use a route with 2 to 30 valid stops." }, 400);
     const path = action.path.replace(":id", encodeURIComponent(typeof body.id === "string" ? body.id : ""));
     const hasBody = Object.keys(values).length > 0;
-    const result = await backendRequest<unknown>(path, { method: action.method, headers, ...(hasBody ? { body: JSON.stringify(values) } : {}) });
+    const result = await backendRequest<unknown>(path, { method: action.method, headers, ...(hasBody ? { body: JSON.stringify(values) } : {}), ...(pricingSwitch ? { signal: AbortSignal.timeout(25000) } : {}) });
     return json(result, action.method === "POST" ? 201 : 200);
   } catch (error) { return failure(error); }
 }

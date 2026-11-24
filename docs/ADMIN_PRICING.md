@@ -1,7 +1,7 @@
 # Pricing administration
 
 The Pricing workspace reuses Button, Card, Alert, EmptyState, FormField, Input
-and PageHeader. Its native confirmation dialog is feature-specific and uses
+and the portal PageHeading. Its native confirmation dialog is feature-specific and uses
 the existing semantic color, spacing and radius tokens. No globally shared
 component or showcase API changed.
 
